@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.services;
 
 public interface SpaceService {
     
