@@ -23,11 +23,11 @@ public class Question {
     @Column
     private String question;
     
-    @OneToOne(mappedBy="question")
+    @OneToOne
+    @JoinColumn(name="spaceId")
     private Space space;
 
-    @OneToMany
-    @JoinColumn(name="answerId")
+    @OneToMany(mappedBy="question")
     private Set<Answer> answers;
 
     public String getQuestion() {

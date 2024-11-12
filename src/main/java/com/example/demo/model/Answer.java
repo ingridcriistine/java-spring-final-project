@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -19,7 +20,8 @@ public class Answer {
     @Column
     private String answer;
 
-    @OneToOne(mappedBy="answer")
+    @OneToOne
+    @JoinColumn(name="questionId")
     private Question question;
 
     public Long getId() {

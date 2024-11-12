@@ -25,8 +25,7 @@ public class Space {
     @OneToMany(mappedBy = "space")
     private Set<Permission> permissions;
 
-    @OneToMany
-    @JoinColumn(name="questionId")
+    @OneToMany(mappedBy="space")
     private Set<Question> questions;
 
     public Long getId() {

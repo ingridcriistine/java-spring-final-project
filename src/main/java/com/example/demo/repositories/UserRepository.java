@@ -9,7 +9,7 @@ import com.example.demo.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> finByEmail(String email);
-    List<User> finByEdv(String edv);
-    List<User> finByName(String name);
+    List<User> findByEmail(String email);
+    List<User> findByEdv(String edv);
+    List<User> findByName(String name);
 }
