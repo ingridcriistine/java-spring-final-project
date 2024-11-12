@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.demo.model.User;
+import com.example.demo.services.AnswerService;
+import com.example.demo.services.PermissionService;
+import com.example.demo.services.QuestionService;
 import com.example.demo.services.SpaceService;
 import com.example.demo.services.UserService;
 
@@ -19,6 +22,15 @@ class DemoApplicationTests {
 
 	@Autowired
 	SpaceService spaceService;
+
+	@Autowired
+	PermissionService permissionService;
+
+	@Autowired
+	QuestionService questionService;
+
+	@Autowired
+	AnswerService answerService;
 
 	@Test
     void validatePassword() {
@@ -59,18 +71,16 @@ class DemoApplicationTests {
 
 	@Test 
 	void validatePermission() {
-		
+		assertEquals(permissionService.createPermission(null, null), null); //retorna null se os parâmetros forem nulos
 	}
 
 	@Test 
 	void validateQuestion() {
-
+		assertEquals(questionService.createQuestion(null, null), null); //retorna null se os parâmetros forem nulos
 	}
 
 	@Test 
 	void validateAnswer() {
-		
+		assertEquals(answerService.createAnswer(null, null), null); //retorna null se os parâmetros forem nulos
 	}
-
-
 }
