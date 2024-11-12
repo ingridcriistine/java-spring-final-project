@@ -27,6 +27,9 @@ public class User {
     @Column
     private String name;
 
+    @Column
+    private String password;
+
     @OneToMany(mappedBy = "user")
     private Set<Permission> permissions;
 
@@ -60,5 +63,13 @@ public class User {
 
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
