@@ -32,6 +32,8 @@ class DemoApplicationTests {
 	@Autowired
 	AnswerService answerService;
 
+	private User user;
+
 	@Test
     void validatePassword() {
         assertEquals(userService.checkPassword(""), false); //senha vazia
@@ -52,19 +54,21 @@ class DemoApplicationTests {
 		String edv = "123456";
 		String email = "user@email.com";
 		String senha = "MinhaSenha12";
+		this.user = userService.createUser(edv, email, senha);
 
-		assertNotEquals(userService.createUser(edv, email, senha), null); //o user será criado se o retorno não for igual a null
+		assertNotEquals(user, null); //o user será criado se o retorno não for igual a null
 		assertNotEquals(userService.authUsers(edv, senha), null); //será feita a autenticação do usuário se o retorno não for igual a null
-		assertNotEquals(userService.getUsers(email, edv, 1, 5), null); //irá retornar o user se não for igual a null
-		assertNotEquals(userService.getById(0), null); //irá retornar o user se não for igual a null
+		assertNotEquals(userService.getUsers(null, null, 1, 5), null); //irá retornar o user se não for igual a null
+		assertNotEquals(userService.getById(user.getId()), null); //irá retornar o user se não for igual a null
 	}
 
 	@Test
 	void validateSpace() {
 		String name = "Teste";
-		var user = new User();
-		var space = spaceService.createSpace(name, user);
+		var space = spaceService.createSpace(name, this.user);
 
+		assertNotEquals(space, null); //o space será criado se o retorno não for igual a null
+		assertEquals(spaceService.createSpace(name, null), null); //se o user for null não pdoerá ser criado o space
 		assertEquals(spaceService.deleteSpace(space.getId()), true); //o space será deletado se o retorno for igual a true
 		assertNotEquals(spaceService.getSpaces(name, 1, 5), null); //irá retornar o space se não for igual a null
 	}

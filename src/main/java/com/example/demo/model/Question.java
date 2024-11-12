@@ -30,6 +30,14 @@ public class Question {
     @OneToMany(mappedBy="question")
     private Set<Answer> answers;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getQuestion() {
         return question;
     }

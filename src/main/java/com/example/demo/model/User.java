@@ -33,6 +33,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Permission> permissions;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getEmail() {
         return email;
     }
