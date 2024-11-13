@@ -2,17 +2,16 @@ package com.example.demo.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.LoginData;
 import com.example.demo.dto.UserData;
+import com.example.demo.dto.UsersList;
 import com.example.demo.impl.UserImplements;
 import com.example.demo.model.User;
 
@@ -60,18 +59,17 @@ public class UserController {
             
             }
 
-            @GetMapping("/auth")
-            public ResponseEntity<String> Login(@RequestParam(value = "page", defaultValue = "1") Integer page,
+            @GetMapping("/user")
+            public ResponseEntity<UsersList> Login(@RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "1") Integer size){
         
-         
-                List<User> Login = functions.getUsers(page,size);
+                List<User> Users = functions.getUsers(page,size);
         
-                if (Login == null) {
-                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                if (Users == null) {
+                    return new ResponseEntity<UsersList>(new UsersList(null, "Not founded any Users"),HttpStatus.NO_CONTENT);
                 }
         
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<UsersList>(new UsersList(Users, "Queru sucessfull completed"),HttpStatus.OK);
                 
                 }
 }

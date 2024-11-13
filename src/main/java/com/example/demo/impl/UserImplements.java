@@ -1,5 +1,6 @@
 package com.example.demo.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,8 +66,16 @@ public class UserImplements implements UserService {
     @Override
     public List<User> getUsers(Integer page, Integer size) {
         List<User> Users = repo.findAll();
-
-        return Users;
+        
+        int start = (page-1) * size;
+        
+        if (start >= Users.size()) {
+            return Collections.emptyList();
+        }
+        
+        int end = start + size;
+        
+        return Users.subList(start, end);
     }
 
     @Override
