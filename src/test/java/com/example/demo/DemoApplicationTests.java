@@ -54,7 +54,8 @@ class DemoApplicationTests {
 		String edv = "123456";
 		String email = "user@email.com";
 		String senha = "MinhaSenha12";
-		this.user = userService.createUser(edv, email, senha);
+		String nome = "joaozinho24";
+		this.user = userService.createUser(edv, email,nome, senha);
 
 		assertNotEquals(user, null); //o user será criado se o retorno não for igual a null
 		assertNotEquals(userService.authUsers(edv, senha), null); //será feita a autenticação do usuário se o retorno não for igual a null
