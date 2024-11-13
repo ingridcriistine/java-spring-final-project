@@ -3,6 +3,8 @@ package com.example.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ public class QuestionController {
     SpaceRepository spaceRepo;
 
     @PostMapping
-    public ResponseEntity<String> postMethodName(@RequestBody QuestionData data) {
+    public ResponseEntity<String> createSpace(@RequestBody QuestionData data) {
 
         var space = spaceRepo.findById(data.idSpace());
 
@@ -34,6 +36,14 @@ public class QuestionController {
         questionService.createQuestion(data.text(), space.get());
         
         return new ResponseEntity<>("fala fi", HttpStatus.ACCEPTED);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteSpace(@PathVariable Long id){
+        
+        questionService.DeleteQuestion(id)?
+            return new ResponseEntity<>("fala fi", HttpStatus.ACCEPTED):
+            return new ResponseEntity<>("fala fi", HttpStatus.BAD_REQUEST);
     }
 
 }
