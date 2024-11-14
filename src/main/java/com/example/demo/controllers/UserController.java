@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.LoginData;
+import com.example.demo.dto.SecurityToken;
 import com.example.demo.dto.Token;
 import com.example.demo.dto.UserData;
 import com.example.demo.dto.UsersList;
@@ -51,28 +52,38 @@ public class UserController {
             return new ResponseEntity<>("Already exist this user", HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
-        
+        return new ResponseEntity<>("Sign up with sucess", HttpStatus.OK);
+
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity<SecurityToken> Login(@RequestBody LoginData data) {
+
+        // ? retorna caso qualquer campo seja falso
+        if (data.edv().isEmpty() || data.password().isEmpty()) {
+            return new ResponseEntity<>(new SecurityToken(null, "Fill all inputs"), HttpStatus.BAD_REQUEST);
         }
 
-        @PostMapping("/auth")
-        public ResponseEntity<String> Login(LoginData data){
-    
-    
-            //? retorna caso qualquer campo seja falso
-            if (data.edv().isEmpty() || data.password().isEmpty() ){ 
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
-            }
-     
-            User Login = userService.authUsers(data.edv(),data.password());
-    
-            if (Login == null) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
-            }
-    
-            return new ResponseEntity<>(HttpStatus.OK);
-            
-            }
+        User Login = userService.authUsers(data.edv(),data.password() );
+
+        if (Login == null) {
+            return new ResponseEntity<>(new SecurityToken(null, "User don't exist"),
+                    HttpStatus.CONFLICT);
+        }
+
+        if (!encoder.matches(data.password(), Login.getPassword())) {
+            return new ResponseEntity<>(new SecurityToken(null, "Invalid password"),
+                    HttpStatus.CONFLICT);
+        }
+
+        Token token = new Token();
+        token.setId(Login.getId());
+
+        var jwt = jwtService.get(token);
+
+        return new ResponseEntity<>(new SecurityToken(jwt, "Sign In With Sucess"), HttpStatus.OK);
+
+    }
 
     @GetMapping("/user")
     public ResponseEntity<UsersList> getUserLimited(@RequestParam(value = "page", defaultValue = "1") Integer page,
