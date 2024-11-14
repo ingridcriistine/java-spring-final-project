@@ -15,9 +15,9 @@ public class QuestionImpl implements QuestionService{
     QuestionRepository questionRepo;
 
     @Override
-    public List<Question> getQuestions(Space space, Integer page, Integer size) {
+    public List<Question> getQuestions(Long space, Integer page, Integer size) {
         try {
-            var questions = questionRepo.findQuestionsWithPagination(space.getId(), page, size);
+            var questions = questionRepo.findQuestionsWithPagination(space, page, size);
             return questions;
         } catch (jakarta.persistence.EntityNotFoundException e) {
             return null;
