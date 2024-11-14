@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 //A tabela terá uma coluna para identificar se é admin. Se ela já tiver a permissão ele já poderá fazer perguntas. Caso não tenha, só pode ver.
@@ -19,11 +19,11 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="userId")
     private User user;
     
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="spaceId")
     private Space space;
 
