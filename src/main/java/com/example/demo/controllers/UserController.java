@@ -5,15 +5,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.LoginData;
+import com.example.demo.dto.SecurityToken;
+import com.example.demo.dto.Token;
 import com.example.demo.dto.UserData;
 import com.example.demo.dto.UsersList;
 import com.example.demo.model.User;
+import com.example.demo.services.JWTService;
 import com.example.demo.services.UserService;
 
 @RestController
@@ -22,23 +27,32 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    JWTService<Token> jwtService;
+
+    @Autowired
+    PasswordEncoder encoder;
+
     @PostMapping("/user")
-    public ResponseEntity<String> RegisterUser(UserData data){
+    public ResponseEntity<String> RegisterUser(@RequestBody UserData data) {
 
-
-        //? retorna caso qualquer campo seja falso
-        if (data.edv().isEmpty() || data.email().isEmpty() || data.name().isEmpty() || data.password().isEmpty() ){ 
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+        // ? retorna caso qualquer campo seja vazio
+        if (data.edv().isEmpty() || data.email().isEmpty() || data.name().isEmpty() || data.password().isEmpty()) {
+            return new ResponseEntity<>("Fill all inputs", HttpStatus.BAD_REQUEST);
         }
-        
- 
+
+        if (!userService.checkPassword(data.password())) {
+            return new ResponseEntity<>("Password don't have certain criteria", HttpStatus.BAD_REQUEST);
+        }
+
         User newUser = userService.createUser(data.edv(), data.email(), data.name(), data.password());
 
-            if (newUser == null) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
-            }
+        // ! VEJA A IMPLEMENTAÇÃO ANTES DE ME XINGAR
+        if (newUser == null) {
+            return new ResponseEntity<>("Already exist this user", HttpStatus.CONFLICT);
+        }
 
-            return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
         
         }
 
@@ -59,19 +73,21 @@ public class UserController {
     
             return new ResponseEntity<>(HttpStatus.OK);
             
+            }
+
+    @GetMapping("/user")
+    public ResponseEntity<UsersList> getUserLimited(@RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "1") Integer size) {
+
+        System.out.println(page);
+        System.out.println(size);
+        List<User> Users = userService.getUsers(page, size);
+        System.out.println(Users.size());
+        if (Users.size() == 0) {
+            return new ResponseEntity<UsersList>(new UsersList(null, "Not founded any Users"), HttpStatus.CONFLICT);
         }
 
-            @GetMapping("/user")
-            public ResponseEntity<UsersList> getUserLimited(@RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "1") Integer size){
-        
-                List<User> Users = userService.getUsers(page,size);
-        
-                if (Users == null) {
-                    return new ResponseEntity<UsersList>(new UsersList(null, "Not founded any Users"),HttpStatus.NO_CONTENT);
-                }
-        
-                return new ResponseEntity<UsersList>(new UsersList(Users, "Queru sucessfull completed"),HttpStatus.OK);
-                
-            }
+        return new ResponseEntity<UsersList>(new UsersList(Users, "Query sucessfull completed"), HttpStatus.OK);
+
+    }
 }

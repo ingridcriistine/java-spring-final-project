@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.demo.model.User;
 import com.example.demo.repositories.UserRepository;
@@ -17,8 +16,7 @@ public class UserImplements implements UserService {
     @Autowired
     UserRepository repo;
 
-    @Autowired
-    PasswordEncoder encoder;
+
 
     //! OS RETORNOS NULOS SÃO POR QUE NÃO CONSIGO MANDAR NADA QUE NÃO SEJA ELE PRO CONTROLLER, NÃO ME XINGUE
     //? Agradeço a compreensão 
@@ -65,9 +63,11 @@ public class UserImplements implements UserService {
 
     @Override
     public List<User> getUsers(Integer page, Integer size) {
-        List<User> Users = repo.findUsersWithPagination((page-1) * size,size);
+        System.out.println("implements: "+ page);
+        System.out.println("implements: "+ size);
+        List<User> Users = repo.findUsersWithPagination((page-1)* size,size);
         
-        if (Users.isEmpty()) {
+        if (Users.size() == 0) {
             return Collections.emptyList();
         }
         
@@ -81,12 +81,10 @@ public class UserImplements implements UserService {
             return null;
         }
 
-        User auth = repo.findByEdv(login).get(0);
         
-        if (!encoder.matches(password, auth.getPassword())) {
-            return null;
-        }
+        User auth = repo.findByEdv(login).get(0);
 
+        
         return auth;
     }
 
