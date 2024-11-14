@@ -13,6 +13,6 @@ import com.example.demo.model.Question;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findByQuestion(String question);
 
-    @Query(value = "SELECT * FROM Question WHERE space_id = :spaceId ORDER BY id OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY", nativeQuery = true)
+    @Query(value = "SELECT * FROM tb_question WHERE space_id = :spaceId ORDER BY id OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY", nativeQuery = true)
     List<Question> findQuestionsWithPagination(@Param("spaceId") Long spaceId, @Param("offset") int offset, @Param("limit") int limit);
 }

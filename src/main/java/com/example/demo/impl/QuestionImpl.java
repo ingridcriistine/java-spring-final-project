@@ -1,9 +1,12 @@
 package com.example.demo.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.dto.QuestionData;
 import com.example.demo.model.Question;
 import com.example.demo.model.Space;
 import com.example.demo.repositories.QuestionRepository;
@@ -15,21 +18,32 @@ public class QuestionImpl implements QuestionService{
     QuestionRepository questionRepo;
 
     @Override
-    public List<Question> getQuestions(Long space, Integer page, Integer size) {
+    public QuestionData getQuestion(Long id) {
         try {
-            var questions = questionRepo.findQuestionsWithPagination(space, page, size);
-            return questions;
+            var question = questionRepo.getReferenceById(id);
+
+            QuestionData data = new QuestionData(question.getQuestion(), question.getSpace().getId());
+
+            return data;
+
         } catch (jakarta.persistence.EntityNotFoundException e) {
             return null;
         }
     }
-
+    
     @Override
-    public Question getQuestion(Long id) {
+    public List<QuestionData> getQuestions(Long space, Integer page, Integer size) {
         try {
-            var question = questionRepo.getReferenceById(id);
+            var questions = questionRepo.findQuestionsWithPagination(space, page, size);
 
-            return question;
+            List<QuestionData> data = new ArrayList<>();
+
+            for (Question question : questions) {
+                data.add(new QuestionData(question.getQuestion(), question.getSpace().getId()));
+            }
+
+            return data;
+
         } catch (jakarta.persistence.EntityNotFoundException e) {
             return null;
         }
@@ -51,14 +65,13 @@ public class QuestionImpl implements QuestionService{
 
     @Override
     public boolean DeleteQuestion(Long id) {
-        questionRepo.deleteById(id);
         
         try {
-            questionRepo.getReferenceById(id);
+            questionRepo.deleteById(id);
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
     
 }
