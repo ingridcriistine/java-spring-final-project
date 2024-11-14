@@ -16,8 +16,12 @@ public class QuestionImpl implements QuestionService{
 
     @Override
     public List<Question> getQuestions(Space space, Integer page, Integer size) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getQuestions'");
+        try {
+            var questions = questionRepo.findQuestionsWithPagination(space.getId(), page, size);
+            return questions;
+        } catch (jakarta.persistence.EntityNotFoundException e) {
+            return null;
+        }
     }
 
     @Override
