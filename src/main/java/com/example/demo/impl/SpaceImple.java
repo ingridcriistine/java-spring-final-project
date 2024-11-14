@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.model.Permission;
 import com.example.demo.model.Space;
 import com.example.demo.model.User;
 import com.example.demo.repositories.PermissionRepository;
@@ -30,8 +31,15 @@ public class SpaceImple implements SpaceService {
 
         var space = new Space();
         space.setName(name);
-        space.setPermissions(user.getPermissions());
-    
+        repo.save(space);
+        
+        
+        var UserAdmin = new Permission();
+        UserAdmin.setIsAdmin(true);
+        UserAdmin.setSpace(space);
+        UserAdmin.setUser(user);
+
+        permission.save(UserAdmin);
         return space;
     }
 
