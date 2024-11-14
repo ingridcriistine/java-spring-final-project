@@ -17,4 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.email = :loginValue or u.email = :loginValue")
     List<User> login(@Param("loginValue") String loginValue);
+
+    @Query(value = "SELECT * FROM usuarios ORDER BY id OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY", nativeQuery = true)
+    List<User> findUsersWithPagination(@Param("offset") int offset, @Param("limit") int limit);
 }

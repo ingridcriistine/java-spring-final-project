@@ -30,7 +30,7 @@ public class UserImplements implements UserService {
             return false;
         }
 
-        // Regex que testa se tem Minuscula, Maiuscula e Numerico em qualquer parte da String, veja em Regex101.com se quiser testar
+        //? Regex que testa se tem Minuscula, Maiuscula e Numerico em qualquer parte da String, veja em Regex101.com se quiser testar
         if (!Password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[1-9]).+$")) {
             return false;
         }
@@ -65,17 +65,13 @@ public class UserImplements implements UserService {
 
     @Override
     public List<User> getUsers(Integer page, Integer size) {
-        List<User> Users = repo.findAll();
+        List<User> Users = repo.findUsersWithPagination((page-1) * size,size);
         
-        int start = (page-1) * size;
-        
-        if (start >= Users.size()) {
+        if (Users.isEmpty()) {
             return Collections.emptyList();
         }
         
-        int end = start + size;
-        
-        return Users.subList(start, end);
+        return Users;
     }
 
     @Override
