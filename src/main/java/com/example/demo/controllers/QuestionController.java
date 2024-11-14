@@ -26,24 +26,25 @@ public class QuestionController {
     SpaceRepository spaceRepo;
 
     @PostMapping
-    public ResponseEntity<String> createSpace(@RequestBody QuestionData data) {
+    public ResponseEntity<String> createSpace(@RequestBody QuestionData data){
 
         var space = spaceRepo.findById(data.idSpace());
 
         if(!space.isPresent())
-            return new ResponseEntity<>("Space não encontrado", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Espaço não encontrado", HttpStatus.BAD_REQUEST);
 
         questionService.createQuestion(data.text(), space.get());
         
-        return new ResponseEntity<>("fala fi", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Espaço criado com sucesso", HttpStatus.ACCEPTED);
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSpace(@PathVariable Long id){
         
-        questionService.DeleteQuestion(id)?
-            return new ResponseEntity<>("fala fi", HttpStatus.ACCEPTED):
-            return new ResponseEntity<>("fala fi", HttpStatus.BAD_REQUEST);
+        if(questionService.DeleteQuestion(id))
+            return new ResponseEntity<>("Espaço deletado!", HttpStatus.ACCEPTED);
+            
+        return new ResponseEntity<>("Não foi possível deletar esse Espaço!", HttpStatus.BAD_REQUEST);
     }
 
 }

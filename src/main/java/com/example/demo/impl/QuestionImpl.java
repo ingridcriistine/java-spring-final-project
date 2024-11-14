@@ -22,8 +22,12 @@ public class QuestionImpl implements QuestionService{
 
     @Override
     public Question getQuestion(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getQuestion'");
+        try {
+            var question = questionRepo.getReferenceById(id);
+            return question;
+        } catch (jakarta.persistence.EntityNotFoundException e) {
+            return null;
+        }
     }
 
     @Override
@@ -42,8 +46,14 @@ public class QuestionImpl implements QuestionService{
 
     @Override
     public boolean DeleteQuestion(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'DeleteQuestion'");
+        questionRepo.deleteById(id);
+        
+        try {
+            questionRepo.getReferenceById(id);
+        } catch (jakarta.persistence.EntityNotFoundException e) {
+            return true;
+        }
+        return false;
     }
     
 }
