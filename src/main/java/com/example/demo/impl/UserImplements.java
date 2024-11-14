@@ -38,8 +38,7 @@ public class UserImplements implements UserService {
 
     @Override
     public User createUser(String edv, String email,String name, String Password ) {
-
-
+        
         if (!repo.findByEmail(email).isEmpty()) {
             return null;
         }
@@ -81,10 +80,8 @@ public class UserImplements implements UserService {
             return null;
         }
 
-        
         User auth = repo.findByEdv(login).get(0);
 
-        
         return auth;
     }
 

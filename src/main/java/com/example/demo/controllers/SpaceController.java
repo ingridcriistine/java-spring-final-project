@@ -42,7 +42,7 @@ public class SpaceController {
     PermissionRepository PermissionRepo;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestAttribute("token") Token token,@RequestBody SpaceData data){
+    public ResponseEntity<String> create(@RequestAttribute("token") Token token, @RequestBody SpaceData data){
         if(service.createSpace(data.name(), user.findById(token.getId()).get()) == null){
             return new ResponseEntity<>("Esse nome de espaço já existe!", HttpStatus.OK);
         }
