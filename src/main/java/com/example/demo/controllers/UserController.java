@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.LoginData;
-import com.example.demo.dto.SecurityToken;
 import com.example.demo.dto.Token;
 import com.example.demo.dto.UserData;
 import com.example.demo.dto.UsersList;

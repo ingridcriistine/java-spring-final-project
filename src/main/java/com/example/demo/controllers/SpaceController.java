@@ -22,9 +22,7 @@ import com.example.demo.model.Space;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.repositories.SpaceRepository;
 import com.example.demo.repositories.UserRepository;
-import com.example.demo.repositories.Default.UserRepo;
 import com.example.demo.services.SpaceService;
-import com.example.demo.services.UserService;
 
 @RestController
 @RequestMapping("/spaces")

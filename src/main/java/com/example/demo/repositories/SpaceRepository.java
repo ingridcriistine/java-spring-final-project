@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.Space;
-import com.example.demo.model.User;
 
 @Repository
 public interface SpaceRepository extends JpaRepository<Space, Long> {
