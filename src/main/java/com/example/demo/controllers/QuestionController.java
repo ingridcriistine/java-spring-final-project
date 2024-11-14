@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.QuestionData;
-import com.example.demo.model.Question;
 import com.example.demo.dto.Token;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.repositories.SpaceRepository;
@@ -34,9 +33,6 @@ public class QuestionController {
 
     @Autowired
     SpaceRepository spaceRepo;
-
-    @Autowired
-    PermissionRepository PermissionRepo;
 
     @Autowired
     PermissionRepository PermissionRepo;
