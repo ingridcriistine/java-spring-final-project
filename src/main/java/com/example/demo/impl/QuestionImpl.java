@@ -28,6 +28,7 @@ public class QuestionImpl implements QuestionService{
     public Question getQuestion(Long id) {
         try {
             var question = questionRepo.getReferenceById(id);
+
             return question;
         } catch (jakarta.persistence.EntityNotFoundException e) {
             return null;

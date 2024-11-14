@@ -32,22 +32,22 @@ public class QuestionController {
     @Autowired
     SpaceRepository spaceRepo;
 
-    @GetMapping("/{space}/")
-    public ResponseEntity<List<Question>> getMethodName(
-        @PathVariable Long space,
-        @RequestParam Integer page,
-        @RequestParam Integer size
-        ) {
+    // @GetMapping("/{space}")
+    // public ResponseEntity<List<Question>> getMethodName(
+    //     @PathVariable Long space,
+    //     @RequestParam Integer page,
+    //     @RequestParam Integer size
+    //     ) {
             
-        var questions = questionService.getQuestions(space, page, size);
+    //     var questions = questionService.getQuestions(space, page, size);
         
-        if(questions.isEmpty())
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    //     if(questions.isEmpty())
+    //         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(questions, HttpStatus.OK);
-    }
+    //     return new ResponseEntity<>(questions, HttpStatus.OK);
+    // }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
         
         var question = questionService.getQuestion(id);
