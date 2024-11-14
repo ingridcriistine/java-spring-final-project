@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.LoginData;
 import com.example.demo.dto.UserData;
 import com.example.demo.dto.UsersList;
-import com.example.demo.impl.UserImplements;
 import com.example.demo.model.User;
+import com.example.demo.services.UserService;
 
 @RestController
 public class UserController {
 
-    UserImplements functions = new UserImplements();
+    @Autowired
+    UserService userService;
 
     @PostMapping("/user")
     public ResponseEntity<String> RegisterUser(UserData data){
@@ -30,7 +32,7 @@ public class UserController {
         }
         
  
-        User newUser = functions.createUser(data.edv(), data.email(), data.name(), data.password());
+        User newUser = userService.createUser(data.edv(), data.email(), data.name(), data.password());
 
         if (newUser == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -49,7 +51,7 @@ public class UserController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
             }
      
-            User Login = functions.authUsers(data.edv(),data.password());
+            User Login = userService.authUsers(data.edv(),data.password());
     
             if (Login == null) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -60,10 +62,10 @@ public class UserController {
             }
 
             @GetMapping("/user")
-            public ResponseEntity<UsersList> Login(@RequestParam(value = "page", defaultValue = "1") Integer page,
+            public ResponseEntity<UsersList> getUserLimited(@RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "1") Integer size){
         
-                List<User> Users = functions.getUsers(page,size);
+                List<User> Users = userService.getUsers(page,size);
         
                 if (Users == null) {
                     return new ResponseEntity<UsersList>(new UsersList(null, "Not founded any Users"),HttpStatus.NO_CONTENT);
