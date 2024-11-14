@@ -51,8 +51,7 @@ public class QuestionController {
             return new ResponseEntity<>("Voce nao pode", HttpStatus.FORBIDDEN);
         }
 
-        
-        
+
         if(questionService.DeleteQuestion(id))
             return new ResponseEntity<>("Espaço deletado!", HttpStatus.ACCEPTED);
             
