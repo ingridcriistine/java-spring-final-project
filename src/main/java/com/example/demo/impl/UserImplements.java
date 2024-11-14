@@ -2,6 +2,7 @@ package com.example.demo.impl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -91,5 +92,16 @@ public class UserImplements implements UserService {
         return !repo.findByEdv(Edv).isEmpty();
     }
 
+    @Override
+    public User getById(long id) {
 
+        Optional<User> user = repo.findById(id);
+    
+        if (user.isEmpty()) {
+            return null;
+        }
+
+        return user.get();
+
+    }
 }

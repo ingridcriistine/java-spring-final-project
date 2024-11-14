@@ -9,4 +9,5 @@ public interface UserService {
     User createUser(String edv,String email,String name, String Password);
     List<User> getUsers(Integer page,Integer size); /// Email e edv são da query e podem ser opcionais(null)
     User authUsers(String login,String password);
+    public User getById(long id);
 }
