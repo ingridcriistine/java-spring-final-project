@@ -25,9 +25,9 @@ public class SecurityConfiguration {
         return http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/user").authenticated()
-                .requestMatchers("/auth").authenticated()
-                .anyRequest().permitAll()
+                .requestMatchers("/user").permitAll()
+                .requestMatchers("/auth").permitAll()
+                .anyRequest().authenticated()
             )
             .addFilterBefore(new JWTAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
             .build();
