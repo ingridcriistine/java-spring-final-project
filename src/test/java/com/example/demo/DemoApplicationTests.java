@@ -59,7 +59,7 @@ class DemoApplicationTests {
 
 		assertNotEquals(user, null); //o user será criado se o retorno não for igual a null
 		assertNotEquals(userService.authUsers(edv, senha), null); //será feita a autenticação do usuário se o retorno não for igual a null
-		assertNotEquals(userService.getUsers(null, null, 1, 5), null); //irá retornar o user se não for igual a null
+		assertNotEquals(userService.getUsers(1, 5), null); //irá retornar o user se não for igual a null
 		assertNotEquals(userService.getById(user.getId()), null); //irá retornar o user se não for igual a null
 	}
 

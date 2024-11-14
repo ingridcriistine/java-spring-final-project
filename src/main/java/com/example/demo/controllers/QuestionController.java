@@ -6,11 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.QuestionData;
+import com.example.demo.dto.Token;
+import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.repositories.SpaceRepository;
 import com.example.demo.services.QuestionService;
 
@@ -24,6 +27,9 @@ public class QuestionController {
 
     @Autowired
     SpaceRepository spaceRepo;
+
+    @Autowired
+    PermissionRepository PermissionRepo;
 
     @PostMapping
     public ResponseEntity<String> createSpace(@RequestBody QuestionData data){
@@ -39,7 +45,13 @@ public class QuestionController {
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSpace(@PathVariable Long id){
+    public ResponseEntity<String> deleteSpace(@RequestAttribute("token") Token token,@PathVariable Long id){
+
+        if (PermissionRepo.findById(token.getId()).get().getIsAdmin() == false) {
+            return new ResponseEntity<>("Voce nao pode", HttpStatus.FORBIDDEN);
+        }
+
+        
         
         if(questionService.DeleteQuestion(id))
             return new ResponseEntity<>("Espaço deletado!", HttpStatus.ACCEPTED);
