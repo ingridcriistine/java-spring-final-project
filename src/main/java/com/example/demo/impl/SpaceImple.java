@@ -75,11 +75,12 @@ public class SpaceImple implements SpaceService {
     public boolean deleteSpace(Long id) {
         var checkId = repo.findById(id);
 
-        if(!checkId.isEmpty()){
+        if(checkId.isEmpty()){
             return false;
         }
-
+        var permissionId = permission.findBySpaceId(id).get(0).getId();
         try {
+            permission.deleteById(permissionId);
             repo.deleteById(id);
             return true;
         } catch (Exception ex) {

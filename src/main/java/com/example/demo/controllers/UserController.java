@@ -93,7 +93,7 @@ public class UserController {
         System.out.println(size);
         List<User> Users = userService.getUsers(page, size);
         System.out.println(Users.size());
-        if (Users.size() == 0) {
+        if (Users.isEmpty()) {
             return new ResponseEntity<UsersList>(new UsersList(null, "Not founded any Users"), HttpStatus.CONFLICT);
         }
 
