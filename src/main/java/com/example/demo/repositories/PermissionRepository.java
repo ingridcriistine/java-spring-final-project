@@ -11,4 +11,6 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
     List<Permission> findByIsAdmin(Boolean isAdmin);
     List<Permission> findBySpaceId(Long id);
     List<Permission> findByUserId(Long id);
+
+    boolean existsByUserId(Long userId);
 }

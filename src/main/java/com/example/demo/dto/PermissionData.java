@@ -1,9 +1,9 @@
 package com.example.demo.dto;
 
 public record PermissionData(
-    Long spaceID,
+    Long spaceId,
     Long userId,
-    Boolean isAdmin
+    Boolean IsAdmin
 ) {
     
 }

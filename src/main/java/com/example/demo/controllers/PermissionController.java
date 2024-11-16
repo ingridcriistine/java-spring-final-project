@@ -7,28 +7,45 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.example.demo.dto.LoginData;
 import com.example.demo.dto.PermissionData;
-import com.example.demo.dto.SecurityToken;
 import com.example.demo.dto.Token;
-import com.example.demo.model.User;
 import com.example.demo.repositories.PermissionRepository;
+import com.example.demo.repositories.SpaceRepository;
+import com.example.demo.repositories.UserRepository;
+import com.example.demo.services.PermissionService;
+import com.example.demo.services.QuestionService;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.User;
+import com.example.demo.model.Space;
+
+@RestController
 public class PermissionController {
     
     
     @Autowired
     PermissionRepository PermissionRepo;
     
-    
+    @Autowired
+    PermissionService permissionService;
+
+    @Autowired
+    SpaceRepository spaceRepo;
+
+    @Autowired
+    UserRepository userRepo;
     
     @PostMapping("/permission")
     public ResponseEntity<String> addUserInSpace(@RequestAttribute("token") Token token,@RequestBody PermissionData data) {
 
-        if (PermissionRepo.findByUserId(token.getId()).get(0).getIsAdmin()== false) {
-            return new ResponseEntity<>("Voce nao pode", HttpStatus.FORBIDDEN);
-        }
-        return new ResponseEntity<>("Voce nao pode", HttpStatus.OK);
+        if (PermissionRepo.findByUserId(token.getId()).get(0).getIsAdmin()== false) 
+            return new ResponseEntity<>("Voce nao pode", HttpStatus.NOT_FOUND);
+
+        User user = userRepo.findById(data.userId()).get();
+        Space space = spaceRepo.findById(data.spaceId()).get();
+        permissionService.createPermission(user,space,data.IsAdmin());
+
+        return new ResponseEntity<>("Permission created with sucess", HttpStatus.OK);
 
     }
 }

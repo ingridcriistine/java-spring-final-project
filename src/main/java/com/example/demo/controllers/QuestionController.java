@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,7 +61,11 @@ public class QuestionController {
     }
     
     @PostMapping("/question")
-    public ResponseEntity<String> createQuestion(@RequestBody QuestionData data){
+    public ResponseEntity<String> createQuestion(@RequestAttribute("token") Token token,@RequestBody QuestionData data){
+
+        if(!PermissionRepo.existsByUserId(token.getId()))
+        return new ResponseEntity<>("You don't have permimission for this", HttpStatus.NOT_FOUND);
+
 
         var space = spaceRepo.findById(data.idSpace());
 
@@ -71,7 +74,7 @@ public class QuestionController {
 
         questionService.createQuestion(data.text(), space.get());
         
-        return new ResponseEntity<>("Pergunta criada com sucesso", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Pergunta criada com sucesso", HttpStatus.OK);
     }
     
     @DeleteMapping("/question/{id}")

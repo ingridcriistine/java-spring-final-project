@@ -16,6 +16,8 @@ import com.example.demo.services.JWTService;
 import com.example.demo.services.QuestionService;
 import com.example.demo.services.SpaceService;
 import com.example.demo.services.UserService;
+import com.example.demo.services.PermissionService;
+import com.example.demo.impl.PermissionImplements;
 
 @Configuration
 public class DependencyConfiguration {
@@ -37,6 +39,12 @@ public class DependencyConfiguration {
     @Bean
     public SpaceService spaceService(){
         return new SpaceImple();
+    }
+
+    
+    @Bean
+    public PermissionService permissionService(){
+        return new PermissionImplements();
     }
 
         @Bean
