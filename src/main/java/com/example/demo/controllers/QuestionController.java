@@ -77,8 +77,9 @@ public class QuestionController {
     @DeleteMapping("/question/{id}")
     public ResponseEntity<String> deleteQuestion(@RequestAttribute("token") Token token,@PathVariable Long id){
 
-        System.out.println(PermissionRepo.findByUserId(token.getId()).get(0));
-        if (PermissionRepo.findById(token.getId()).get().getIsAdmin() == false) {
+        // Essa verificação vai ter que mudar, e procurar o espaço, ou se nao caso nem exista alguem ali, dar outro erro, enfim
+        System.out.println(PermissionRepo.findByUserId(token.getId()).get(0).getIsAdmin());
+        if (PermissionRepo.findByUserId(token.getId()).get(0).getIsAdmin()== false) {
             return new ResponseEntity<>("Voce nao pode", HttpStatus.FORBIDDEN);
         }
         if(questionService.DeleteQuestion(id))
