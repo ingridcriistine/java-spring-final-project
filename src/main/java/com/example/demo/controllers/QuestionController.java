@@ -22,7 +22,6 @@ import com.example.demo.repositories.SpaceRepository;
 import com.example.demo.services.QuestionService;
 
 @RestController
-@RequestMapping
 public class QuestionController {
     
     @Autowired
@@ -45,6 +44,7 @@ public class QuestionController {
         return new ResponseEntity<>(question, HttpStatus.OK);
     }
 
+    @SuppressWarnings("null")
     @GetMapping("/questions/{space}")
     public ResponseEntity<List<QuestionData>> getQuestions(
         @PathVariable Long space,
@@ -77,10 +77,10 @@ public class QuestionController {
     @DeleteMapping("/question/{id}")
     public ResponseEntity<String> deleteQuestion(@RequestAttribute("token") Token token,@PathVariable Long id){
 
+        System.out.println(PermissionRepo.findByUserId(token.getId()).get(0));
         if (PermissionRepo.findById(token.getId()).get().getIsAdmin() == false) {
             return new ResponseEntity<>("Voce nao pode", HttpStatus.FORBIDDEN);
         }
-
         if(questionService.DeleteQuestion(id))
             return new ResponseEntity<>("Pergunta deletada!", HttpStatus.ACCEPTED);
             

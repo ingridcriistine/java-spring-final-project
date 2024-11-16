@@ -33,8 +33,10 @@ public class QuestionImpl implements QuestionService{
     @Override
     public List<QuestionData> getQuestions(Long space, Integer page, Integer size) {
         try {
-            var questions = questionRepo.findQuestionsWithPagination(space, page, size);
 
+            if(size == 1)
+            page = 0;
+            var questions = questionRepo.findQuestionsBySpaceIdWithPagination(space, page, size);
             List<QuestionData> data = new ArrayList<>();
 
             for (Question question : questions) {

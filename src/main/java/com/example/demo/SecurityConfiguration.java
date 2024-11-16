@@ -36,8 +36,8 @@ public class SecurityConfiguration {
                 return config;
             }))
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HttpMethod.POST, "/user").permitAll() //Especifica o método POST aqui
-                .requestMatchers(HttpMethod.POST, "/auth").permitAll() //Especifica o método POST aqui
+                .requestMatchers("/user").permitAll() //Especifica o método POST aqui
+                .requestMatchers("/auth").permitAll() //Especifica o método POST aqui
                 .anyRequest().authenticated() // Outras requisições precisam de autenticação
             )
             .addFilterBefore(new JWTAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)

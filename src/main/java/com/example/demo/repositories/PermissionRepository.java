@@ -10,4 +10,5 @@ import com.example.demo.model.Permission;
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
     List<Permission> findByIsAdmin(Boolean isAdmin);
     List<Permission> findBySpaceId(Long id);
+    List<Permission> findByUserId(Long id);
 }
