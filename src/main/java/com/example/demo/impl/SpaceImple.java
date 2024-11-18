@@ -45,7 +45,7 @@ public class SpaceImple implements SpaceService {
 
     @Override
     public List<Space> getSpaces(String name, Integer page, Integer size) {
-        List<Space> Spaces = repo.findSpacesWithPagination((page-1) * size,size);
+        List<Space> Spaces = repo.findSpacesWithPagination(name,(page-1) * size,size);
         
         if (Spaces.isEmpty()) {
             return Collections.emptyList();
