@@ -78,9 +78,9 @@ public class SpaceImple implements SpaceService {
         if(checkId.isEmpty()){
             return false;
         }
-        var permissionId = permission.findBySpaceId(id).get(0).getId();
+        // var permissionId = permission.findBySpaceId(id).get(0).getId();
         try {
-            permission.deleteById(permissionId);
+            // permission.deleteById(permissionId);
             repo.deleteById(id);
             return true;
         } catch (Exception ex) {
