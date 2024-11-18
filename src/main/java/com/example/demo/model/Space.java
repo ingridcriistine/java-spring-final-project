@@ -21,10 +21,10 @@ public class Space {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "space",orphanRemoval = true)
+    @OneToMany(mappedBy = "space", orphanRemoval = true)
     private Set<Permission> permissions;
 
-    @OneToMany(mappedBy="space",orphanRemoval = true)
+    @OneToMany(mappedBy="space", orphanRemoval = true)
     private Set<Question> questions;
 
     public Long getId() {
