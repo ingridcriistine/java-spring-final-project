@@ -27,7 +27,7 @@ public class Question {
     @JoinColumn(name="spaceId")
     private Space space;
 
-    @OneToMany(mappedBy="question",orphanRemoval = true)
+    @OneToMany(mappedBy="question", orphanRemoval = true)
     private Set<Answer> answers;
 
     public Long getId() {

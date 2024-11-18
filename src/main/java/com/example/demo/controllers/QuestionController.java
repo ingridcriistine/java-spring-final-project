@@ -92,7 +92,12 @@ public class QuestionController {
     }
 
     @PostMapping("/question")
-    public ResponseEntity<String> createQuestion(@RequestBody QuestionDataAnwers data) {
+    public ResponseEntity<String> createQuestion(@RequestAttribute("token") Token token,@RequestBody QuestionData data) {
+
+
+        if (PermissionRepo.havePermission(token.getId(), data.idSpace()) == 0) {
+            return new ResponseEntity<>("Você nao tem permissão", HttpStatus.BAD_REQUEST);
+        }
 
         var space = spaceRepo.findById(data.idSpace());
 
