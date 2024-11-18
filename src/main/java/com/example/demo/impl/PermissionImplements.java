@@ -27,7 +27,6 @@ public class PermissionImplements implements PermissionService {
 
     @Override
     public boolean IsAdm(User user, Long id) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'IsAdm'");
     }
     

@@ -3,7 +3,6 @@ package com.example.demo.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.model.Answer;
-import com.example.demo.model.Question;
 import com.example.demo.repositories.AnswerRepository;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.repositories.QuestionRepository;
