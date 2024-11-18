@@ -28,7 +28,7 @@ public class AnswerController {
     public ResponseEntity<String> answer(@RequestAttribute("token") Token token,@RequestBody AnswerData data){
         
         
-        if(PermissionRepo.findById(token.getId()).isEmpty()){
+        if(PermissionRepo.findByUserId(token.getId()).isEmpty()){
             return new ResponseEntity<>("Você não possui permissao para comentar", HttpStatus.OK);
         }
         
