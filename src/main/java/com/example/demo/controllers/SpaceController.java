@@ -20,7 +20,6 @@ import com.example.demo.dto.SpaceList;
 import com.example.demo.dto.Token;
 import com.example.demo.model.Space;
 import com.example.demo.repositories.PermissionRepository;
-import com.example.demo.repositories.SpaceRepository;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.SpaceService;
 
@@ -30,10 +29,6 @@ public class SpaceController {
     
     @Autowired
     SpaceService service;
-
-    @Autowired
-    SpaceRepository repo;
-
 
     @Autowired
     UserRepository user;
