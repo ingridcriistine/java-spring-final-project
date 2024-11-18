@@ -61,10 +61,8 @@ public class UserImplements implements UserService {
     }
 
     @Override
-    public List<User> getUsers(Integer page, Integer size) {
-        System.out.println("implements: "+ page);
-        System.out.println("implements: "+ size);
-        List<User> Users = repo.findUsersWithPagination((page-1)* size,size);
+    public List<User> getUsers(String query, Integer page, Integer size) {
+        List<User> Users = repo.findUsersWithPagination(query,(page-1)* size, size);
         
         if (Users.size() == 0) {
             return Collections.emptyList();
