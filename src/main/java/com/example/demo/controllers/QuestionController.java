@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.QuestionData;
 import com.example.demo.dto.Token;
+import com.example.demo.model.Question;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.repositories.SpaceRepository;
 import com.example.demo.services.QuestionService;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping
@@ -41,15 +39,20 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public ResponseEntity<QuestionData> getQuestionById(@PathVariable Long id) {
         
-        var question = questionService.getQuestion(id);
+        Question question = questionService.getQuestion(id);
 
         if(question == null)
-            return new ResponseEntity<>(question, HttpStatus.NOT_FOUND);
-
-        return new ResponseEntity<>(question, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        
+        QuestionData data = new QuestionData(
+            question.getQuestion(), 
+            question.getSpace().getId(),
+            question.getAnswers()
+        );
+        
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @SuppressWarnings("null")
     @GetMapping("/questions/{space}")
     public ResponseEntity<List<QuestionData>> getQuestions(
         @PathVariable Long space,
@@ -57,13 +60,18 @@ public class QuestionController {
         @RequestParam(name= "size", required=true) Integer size
         ) {
             
-        var questions = questionService.getQuestions(space, page, size);
+        var questions = questionService.getQuestions(space, (page - 1) * size, size);
         
+        List<QuestionData> data = new ArrayList<>();
+
+            for (Question question : questions) {
+                data.add(new QuestionData(question.getQuestion(), question.getSpace().getId(), question.getAnswers()));
+            }
 
         if(questions.isEmpty())
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(questions, HttpStatus.OK);
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
     
     @PostMapping("/question")

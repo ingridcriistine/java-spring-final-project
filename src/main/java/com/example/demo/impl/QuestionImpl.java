@@ -1,11 +1,9 @@
 package com.example.demo.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.dto.QuestionData;
 import com.example.demo.model.Question;
 import com.example.demo.model.Space;
 import com.example.demo.repositories.QuestionRepository;
@@ -17,13 +15,11 @@ public class QuestionImpl implements QuestionService{
     QuestionRepository questionRepo;
 
     @Override
-    public QuestionData getQuestion(Long id) {
+    public Question getQuestion(Long id) {
         try {
             var question = questionRepo.getReferenceById(id);
 
-            QuestionData data = new QuestionData(question.getQuestion(), question.getSpace().getId());
-
-            return data;
+            return question;
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             return null;
@@ -31,19 +27,13 @@ public class QuestionImpl implements QuestionService{
     }
     
     @Override
-    public List<QuestionData> getQuestions(Long space, Integer page, Integer size) {
+    public List<Question> getQuestions(Long space, Integer page, Integer size) {
         try {
             if(size == 1)
             page = 0;
-            var questions = questionRepo.findQuestionsWithPagination(space, (page-1)*size, size);
+            var questions = questionRepo.findQuestionsWithPagination(space, (page-1) * size, size);
 
-            List<QuestionData> data = new ArrayList<>();
-
-            for (Question question : questions) {
-                data.add(new QuestionData(question.getQuestion(), question.getSpace().getId()));
-            }
-
-            return data;
+            return questions;
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             return null;
