@@ -23,7 +23,7 @@ public class AnswerImpl implements AnswerService {
     public Answer createAnswer(Long idQuestion, String answer) {
         var checkQuestion = repoQuest.findById(idQuestion);
 
-        if(!checkQuestion.isEmpty()){
+        if(checkQuestion.isEmpty()){
             return null;
         }
 

@@ -25,7 +25,7 @@ public class SpaceImple implements SpaceService {
     public Space createSpace(String name, User user) {
         var checkSpace = repo.findByName(name);
 
-        if(!checkSpace.isEmpty()){
+        if(checkSpace.isEmpty()){
             return null;
         }
 
