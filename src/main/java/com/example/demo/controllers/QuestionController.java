@@ -22,7 +22,6 @@ import com.example.demo.services.QuestionService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.sun.net.httpserver.HttpsConfigurator;
 
 @RestController
 @RequestMapping
@@ -48,6 +47,7 @@ public class QuestionController {
         return new ResponseEntity<>(question, HttpStatus.OK);
     }
 
+    @SuppressWarnings("null")
     @GetMapping("/questions/{space}")
     public ResponseEntity<List<QuestionData>> getQuestions(
         @PathVariable Long space,
