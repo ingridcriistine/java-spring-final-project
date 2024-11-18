@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.AnswerData;
 import com.example.demo.dto.Token;
 import com.example.demo.model.Answer;
 import com.example.demo.repositories.PermissionRepository;
@@ -24,17 +25,19 @@ public class AnswerController {
 
 
     @PostMapping("/answer")
-    public ResponseEntity<String> answer(@RequestAttribute("token") Token token, Long idQuesiton, @RequestBody Answer data){
+    public ResponseEntity<String> answer(@RequestAttribute("token") Token token,@RequestBody AnswerData data){
         
-        if(idQuesiton == null){
+        
+        if(PermissionRepo.findById(token.getId()).isEmpty()){
+            return new ResponseEntity<>("Você não possui permissao para comentar", HttpStatus.OK);
+        }
+        
+        var newAnswer = service.createAnswer(data.idQuestion(), data.answer());
+
+        if(newAnswer == null){
             return new ResponseEntity<>("Pergunta inválida", HttpStatus.OK);
         }
 
-        if(PermissionRepo.findById(token.getId()).get() == null){
-            return new ResponseEntity<>("Você não possui permissao para comentar", HttpStatus.OK);
-        }
-
-        service.createAnswer(null, null);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }

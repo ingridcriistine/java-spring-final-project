@@ -29,7 +29,7 @@ public class AnswerImpl implements AnswerService {
         }
 
         var newAnswer = new Answer();
-        newAnswer.setQuestion(repoQuest.findById(idQuestion).get());
+        newAnswer.setQuestion(checkQuestion.get());
         newAnswer.setAnswer(answer);
         repo.save(newAnswer);
 
