@@ -70,7 +70,9 @@ public class SpaceController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@RequestAttribute("token") Token token, @PathVariable Long id){
         
-        if(PermissionRepo.findById(token.getId()).get().getIsAdmin() == false ){
+        var permission = PermissionRepo.findByUserId(token.getId());
+
+        if(permission.isEmpty() || permission.get(0).getIsAdmin() == false){
             return new ResponseEntity<>("Voce não possui permissão para deletar o espaço", HttpStatus.OK);
         }
 

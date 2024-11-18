@@ -37,8 +37,11 @@ public class PermissionController {
     @PostMapping("/permission")
     public ResponseEntity<String> addUserInSpace(@RequestAttribute("token") Token token, @RequestBody PermissionData data) {
 
-        if (PermissionRepo.findByUserId(token.getId()).get(0).getIsAdmin()== false) 
-            return new ResponseEntity<>("Voce nao pode", HttpStatus.NOT_FOUND);
+        var permission = PermissionRepo.findByUserId(token.getId());
+
+        if(permission.isEmpty() || permission.get(0).getIsAdmin() == false){
+            return new ResponseEntity<>("Voce não possui permissão para a ação", HttpStatus.OK);
+        }
 
         User user = userRepo.findById(data.userId()).get();
         Space space = spaceRepo.findById(data.spaceId()).get();
