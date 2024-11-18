@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.AnswerData;
 import com.example.demo.dto.Token;
-import com.example.demo.model.Answer;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.services.AnswerService;
 

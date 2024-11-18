@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.QuestionData;
+import com.example.demo.dto.QuestionDataAnwers;
 import com.example.demo.dto.SpaceData;
 import com.example.demo.dto.SpaceList;
 import com.example.demo.dto.SpaceReturn;
