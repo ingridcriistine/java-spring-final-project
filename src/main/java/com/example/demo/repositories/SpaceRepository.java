@@ -13,6 +13,6 @@ import com.example.demo.model.Space;
 public interface SpaceRepository extends JpaRepository<Space, Long> {
     List<Space> findByName(String name);
 
-    @Query(value = "SELECT id,name FROM tb_space ORDER BY id OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY", nativeQuery = true)
+    @Query(value = "SELECT * FROM tb_space ORDER BY id OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY", nativeQuery = true)
     List<Space> findSpacesWithPagination(@Param("offset") int offset, @Param("limit") int limit);
 }
