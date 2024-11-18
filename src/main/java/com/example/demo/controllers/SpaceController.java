@@ -20,7 +20,6 @@ import com.example.demo.dto.SpaceList;
 import com.example.demo.dto.Token;
 import com.example.demo.model.Space;
 import com.example.demo.repositories.PermissionRepository;
-import com.example.demo.repositories.SpaceRepository;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.SpaceService;
 
@@ -32,17 +31,13 @@ public class SpaceController {
     SpaceService service;
 
     @Autowired
-    SpaceRepository repo;
-
-
-    @Autowired
     UserRepository user;
 
     @Autowired
     PermissionRepository PermissionRepo;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestAttribute("token") Token token,@RequestBody SpaceData data){
+    public ResponseEntity<String> create(@RequestAttribute("token") Token token, @RequestBody SpaceData data){
         if(service.createSpace(data.name(), user.findById(token.getId()).get()) == null){
             return new ResponseEntity<>("Esse nome de espaço já existe!", HttpStatus.OK);
         }
