@@ -21,6 +21,9 @@ import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.repositories.SpaceRepository;
 import com.example.demo.services.QuestionService;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping

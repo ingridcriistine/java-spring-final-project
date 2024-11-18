@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.QuestionData;
 import com.example.demo.dto.SpaceData;
 import com.example.demo.dto.SpaceList;
+import com.example.demo.dto.SpaceReturn;
 import com.example.demo.dto.Token;
+import com.example.demo.model.Question;
 import com.example.demo.model.Space;
 import com.example.demo.repositories.PermissionRepository;
-import com.example.demo.repositories.SpaceRepository;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.SpaceService;
 
@@ -32,17 +35,13 @@ public class SpaceController {
     SpaceService service;
 
     @Autowired
-    SpaceRepository repo;
-
-
-    @Autowired
     UserRepository user;
 
     @Autowired
     PermissionRepository PermissionRepo;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestAttribute("token") Token token,@RequestBody SpaceData data){
+    public ResponseEntity<String> create(@RequestAttribute("token") Token token, @RequestBody SpaceData data){
         if(service.createSpace(data.name(), user.findById(token.getId()).get()) == null){
             return new ResponseEntity<>("Esse nome de espaço já existe!", HttpStatus.OK);
         }
@@ -58,10 +57,14 @@ public class SpaceController {
         List<Space> Spaces = service.getSpaces(name, page, size);
 
         if(Spaces == null){
-            return new ResponseEntity<SpaceList>(new SpaceList(null, "Espaço não encontrado"), HttpStatus.OK);
+            return new ResponseEntity<>(new SpaceList(null, "Espaço não encontrado"), HttpStatus.OK);
         }
+        List<SpaceReturn> data = new ArrayList<>();
+        for (Space space : Spaces) {
+                data.add(new SpaceReturn(space.getId(), space.getName()));
+            }
 
-        return new ResponseEntity<SpaceList>(new SpaceList(Spaces, "Pesquisa finalizada!"), HttpStatus.OK);
+        return new ResponseEntity<>(new SpaceList(data, "Pesquisa finalizada!"), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -4,8 +4,7 @@ import java.util.List;
 
 import com.example.demo.model.Space;
 
-
 public record SpaceList(
-    List<Space> Spaces,
+    List<SpaceReturn> Spaces,
     String message
 ) {}
