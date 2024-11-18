@@ -35,14 +35,14 @@ public class PermissionController {
     UserRepository userRepo;
     
     @PostMapping("/permission")
-    public ResponseEntity<String> addUserInSpace(@RequestAttribute("token") Token token,@RequestBody PermissionData data) {
+    public ResponseEntity<String> addUserInSpace(@RequestAttribute("token") Token token, @RequestBody PermissionData data) {
 
         if (PermissionRepo.findByUserId(token.getId()).get(0).getIsAdmin()== false) 
             return new ResponseEntity<>("Voce nao pode", HttpStatus.NOT_FOUND);
 
         User user = userRepo.findById(data.userId()).get();
         Space space = spaceRepo.findById(data.spaceId()).get();
-        permissionService.createPermission(user,space,data.IsAdmin());
+        permissionService.createPermission(user, space, data.isAdmin());
 
         return new ResponseEntity<>("Permission created with sucess", HttpStatus.OK);
 
