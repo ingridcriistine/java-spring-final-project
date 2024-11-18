@@ -7,12 +7,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.demo.dto.Token;
 import com.example.demo.impl.DefaultJWTService;
+import com.example.demo.impl.PermissionImplements;
 import com.example.demo.impl.QuestionImpl;
 import com.example.demo.impl.SpaceImple;
 import com.example.demo.impl.UserImplements;
 import com.example.demo.repositories.interfaces.UserInter;
 import com.example.demo.repositories.mocks.UserMock;
 import com.example.demo.services.JWTService;
+import com.example.demo.services.PermissionService;
 import com.example.demo.services.QuestionService;
 import com.example.demo.services.SpaceService;
 import com.example.demo.services.UserService;
@@ -38,7 +40,12 @@ public class DependencyConfiguration {
     public SpaceService spaceService(){
         return new SpaceImple();
     }
-
+    
+    @Bean
+    public PermissionService permissionService(){
+        return new PermissionImplements();
+    }
+    
         @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(8);

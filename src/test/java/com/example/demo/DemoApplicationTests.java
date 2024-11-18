@@ -76,7 +76,7 @@ class DemoApplicationTests {
 
 	@Test 
 	void validatePermission() {
-		assertEquals(permissionService.createPermission(null, null), null); //retorna null se os parâmetros forem nulos
+		assertEquals(permissionService.createPermission(null, null, false), null); //retorna null se os parâmetros forem nulos
 	}
 
 	@Test 
