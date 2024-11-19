@@ -34,3 +34,10 @@ footer button {
     margin-left: 10px;
     border-radius: 10px;
 }
+
+summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
