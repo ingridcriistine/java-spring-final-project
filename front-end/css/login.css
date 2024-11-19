@@ -1,0 +1,69 @@
+* {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    font-weight: 900;
+    margin-top: 20px;
+}
+
+.loginInputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loginInputs input {
+    width: 400px;
+    height: 40px;
+    margin-bottom: 20px;
+}
+
+.loginInputs button {
+    width: 200px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.signIn {
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+}
+
+.signIn:hover {
+    background-color: white;
+    color: black;
+}
+
+.signUp {
+    border-radius: 10px;
+    background: none;
+    color: black;
+    text-decoration:underline;
+    border: none;
+}
+
+.signUp:hover {
+    color: blue;
+    text-decoration: none;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-body input {
+    width: 80%;
+    height: 40px;
+    margin-bottom: 20px;
+}
