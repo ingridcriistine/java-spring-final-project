@@ -1,3 +1,9 @@
+header div {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
 .title {
     font-weight: 900;
 }
@@ -10,9 +16,18 @@ main {
 
 .question {
     display: flex;
-    align-items: end;
+    flex-direction: column;
+    align-items: start;
     justify-content: space-between;
     width: 70%;
+}
+
+.question details {
+    margin: 10px 0px;
+}
+
+.question button {
+    margin: 0px 40px;
 }
 
 footer {

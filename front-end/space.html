@@ -12,13 +12,39 @@
 </head>
 <body>
     <header>
-        <h3 class="title">-NOME DO ESPAÇO-</h3>
+        <div>
+            <h3 class="title">-NOME DO ESPAÇO-</h3>
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#PermissionModal">New Permission</button>
+        </div>
         <hr>
     </header>
     <main>
+        <div class="search">
+            <input type="text" class="btn btn-outline-info" placeholder="Search">
+            <button class="btn btn-info">🔎</button>
+        </div>
+
         <div class="question">
             <details>
-                <summary> > <h4>PERGUNTA</h3> <button data-bs-toggle="modal" data-bs-target="#signUpModal">Answer</button></summary>
+                <summary> > <h4>PERGUNTA</h3> <button class="btn btn-danger">Delete</button> <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AnswerModal">Answer</button></summary>
+                <div>
+                    <p>Resposta 1</p>
+                    <p>Resposta 2</p>
+                    <p>Resposta 3</p>
+                    <p>Resposta 4</p>
+                </div>
+            </details>
+            <details>
+                <summary> > <h4>PERGUNTA</h3> <button class="btn btn-danger">Delete</button> <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AnswerModal">Answer</button></summary>
+                <div>
+                    <p>Resposta 1</p>
+                    <p>Resposta 2</p>
+                    <p>Resposta 3</p>
+                    <p>Resposta 4</p>
+                </div>
+            </details>
+            <details>
+                <summary> > <h4>PERGUNTA</h3> <button class="btn btn-danger">Delete</button> <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AnswerModal">Answer</button></summary>
                 <div>
                     <p>Resposta 1</p>
                     <p>Resposta 2</p>
@@ -29,23 +55,40 @@
         </div>
     </main>
     <footer>
-        <input type="text" placeholder="Question">
-        <button>></button>
+        <input type="text" class="btn btn-outline-success" placeholder="Question">
+        <button class="btn btn-success">></button>
     </footer>
 
-    <!-- Modal -->
-    <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Modal Answer -->
+    <div class="modal fade" id="AnswerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Sign Up</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Register Answer</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="text" placeholder="EDV">
-                <input type="text" placeholder="Name">
-                <input type="text" placeholder="Email">
-                <input type="text" placeholder="Password">
+                <input type="text" placeholder="Answer">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Register</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Permission -->
+    <div class="modal fade" id="PermissionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">New Permission</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="number" placeholder="ID User">
+                <input type="number" placeholder="is admin?">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
