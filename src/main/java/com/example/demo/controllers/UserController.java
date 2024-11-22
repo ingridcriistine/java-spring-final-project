@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +23,9 @@ import com.example.demo.model.User;
 import com.example.demo.services.JWTService;
 import com.example.demo.services.UserService;
 
+@CrossOrigin(origins = {"http://localhost:8080"})
 @RestController
+@RequestMapping()
 public class UserController {
 
     @Autowired
@@ -35,30 +39,31 @@ public class UserController {
 
     @PostMapping("/user")
     public ResponseEntity<String> RegisterUser(@RequestBody UserData data) {
-
+        System.out.println("CHAMOU");
         // ? retorna caso qualquer campo seja vazio
         if (data.edv().isEmpty() || data.email().isEmpty() || data.name().isEmpty() || data.password().isEmpty()) {
             return new ResponseEntity<>("Fill all inputs", HttpStatus.BAD_REQUEST);
         }
-
+        
         if (!userService.checkPassword(data.password())) {
             return new ResponseEntity<>("Password don't have certain criteria", HttpStatus.BAD_REQUEST);
         }
-
+        
         User newUser = userService.createUser(data.edv(), data.email(), data.name(), data.password());
-
+        
         // ! VEJA A IMPLEMENTAÇÃO ANTES DE ME XINGAR
         if (newUser == null) {
             return new ResponseEntity<>("Already exist this user", HttpStatus.CONFLICT);
         }
-
+        
         return new ResponseEntity<>("Sign up with sucess", HttpStatus.OK);
-
+        
     }
-
+    
     @PostMapping("/auth")
     public ResponseEntity<SecurityToken> Login(@RequestBody LoginData data) {
-
+        System.out.println("CHAMA");
+        
         // ? retorna caso qualquer campo seja falso
         if (data.edv().isEmpty() || data.password().isEmpty()) {
             return new ResponseEntity<>(new SecurityToken(null, "Fill all inputs"), HttpStatus.BAD_REQUEST);

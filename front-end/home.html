@@ -12,35 +12,11 @@
         <button class="button btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#NewSpace">New Space</button>
     </header>
     <main style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; margin: 10px; gap: 10px">
-        <form>
-            <input type="text" class="btn btn-outline-info">
-            <input type="submit" class="btn btn-info">
-        </form>
+        <div>
+            <input type="text" class="btn btn-outline-info" id="searchInput">
+            <input type="submit" class="btn btn-info" onclick="searchSpaces()">
+        </div>
         <h2>Your Spaces:</h2>
-        <div class="block">
-            <a href="./space.html">
-                    Space name
-            </a>
-            <button class="btn btn-danger">
-                Delete
-            </button>
-        </div>
-        <div class="block">
-            <a href="./space.html">
-                    Space name
-            </a>
-            <button class="btn btn-danger">
-                Delete
-            </button>
-        </div>
-        <div class="block">
-            <a href="./space.html">
-                    Space name
-            </a>
-            <button class="btn btn-danger">
-                Delete
-            </button>
-        </div>
         <div class="block">
             <a href="./space.html">
                     Space name
@@ -58,7 +34,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5">New Space</h1>
+            <h1 class="modal-title fs-5" id="a">New Space</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -76,7 +52,48 @@
         </div>
       </div>
     </div>
+    <script>
+      async function searchSpaces() {
+        const search = document.getElementById("searchInput").value
+        const url = search ? `http://localhost:8080/spaces?query=${search}` : "http://localhost:8080/spaces"
+        let token = sessionStorage.getItem("token")
 
+        let header = new Headers();
+        header.append("Authorization", "Bearer " + token);
+        header.append('Content-Type', 'none');
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: header
+          }
+        )
+        .catch(error => console.error('Erro ao buscar espaços:', error));
+
+        const spaces = await response.json()
+        spaces.forEach(space => {
+          let div = document.createElement('div');
+          div.classList.add('block');
+
+          let link = document.createElement('a');
+          link.href = './space.html';
+          link.textContent = space.name;
+
+          div.appendChild(link);
+
+          let button = document.createElement('button');
+          button.classList.add('btn', 'btn-danger');
+          button.textContent = 'Delete';
+
+          div.appendChild(button);
+
+          document.body.appendChild(div); 
+        });
+      }
+
+      window.onload = async function() {
+          await searchSpaces();
+      };
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

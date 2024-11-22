@@ -16,12 +16,12 @@
         <h1 class="title">LOGIN</h1>
 
         <div class="loginInputs">
-            <input type="text" placeholder="EDV">
-            <input type="text" placeholder="Password">
+            <input id="edv_login" type="text" placeholder="EDV">
+            <input id="password_login" type="text" placeholder="Password">
     
-            <button class="signIn">Sign in</button>
+            <button class="signIn" onclick="SignIn()">Sign in</button>
             
-            <button class="signUp" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign up</button>
+            <button class="signUp" data-bs-toggle="modal" data-bs-target="#signUpModal" >Sign up</button>
         </div>
 
         <!-- Modal Cadastro -->
@@ -33,21 +33,98 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="text" placeholder="EDV">
-                <input type="text" placeholder="Name">
-                <input type="text" placeholder="Email">
-                <input type="text" placeholder="Password">
+                <input id="edv_reg" type="text" placeholder="EDV">
+                <input id="name_reg" type="text" placeholder="Name">
+                <input id="email_reg" type="text" placeholder="Email">
+                <input id="password_reg" type="text" placeholder="Password">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Register</button>
+                <button type="button" class="btn btn-primary" onclick="SignUp()" >Register</button>
             </div>
             </div>
         </div>
         </div>
 
     </main>
+    <script>
+        async function SignIn() {
+            const edv = document.getElementById("edv_login").value;
+            const password = document.getElementById("password_login").value;
 
+            const userData = {
+                edv: edv,
+                password: password
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (!response.ok) {
+                    const errorMessage = await response.text();
+                    alert(errorMessage);
+                    return;
+                }
+
+                const result = await response.json();
+
+                if(result.token != null)
+                    window.location.href = 'home.html';
+
+                // TOKEN: result.token;
+
+                sessionStorage.setItem("token", result.token)
+
+                alert(result.message);
+
+            } catch (error) {
+                alert('Erro ao se conectar ao servidor: ' + error.message);
+            }
+        }
+
+        async function SignUp() {
+            const edv = document.getElementById("edv_reg").value;
+            const email = document.getElementById("email_reg").value;
+            const name = document.getElementById("name_reg").value;
+            const password = document.getElementById("password_reg").value;
+
+            const userData = {
+                edv: edv,
+                email: email,
+                name: name,
+                password: password
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (!response.ok) {
+                    const errorMessage = await response.text();
+                    alert(errorMessage);
+                    return;
+                }
+
+                const result = await response.text();
+
+                alert(result);
+
+            } catch (error) {
+                alert('Erro ao se conectar ao servidor: ' + error.message);
+            }
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

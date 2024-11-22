@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge 5 - Cities Index</title>
+    <script>
+        // Função para buscar cidades com base no parâmetro de busca
+        async function searchCities() {
+            const search = document.getElementById("searchInput").value;
+            const url = search ? `/cities/${search}` : "/cities"; // Determina a URL da API
+
+            try {
+                const response = await fetch(url);
+                const cities = await response.json(); // Recebe a resposta em formato JSON
+
+                // Atualiza a tabela com as cidades recebidas
+                const tableBody = document.getElementById("citiesTableBody");
+                tableBody.innerHTML = ""; // Limpa a tabela antes de adicionar os novos dados
+
+                cities.forEach(city => {
+                    const row = document.createElement("tr");
+
+                    const cityNameCell = document.createElement("td");
+                    cityNameCell.textContent = city.name;
+                    row.appendChild(cityNameCell);
+
+                    const stateCell = document.createElement("td");
+                    stateCell.textContent = city.state;
+                    row.appendChild(stateCell);
+
+                    const countryCell = document.createElement("td");
+                    countryCell.textContent = city.country;
+                    row.appendChild(countryCell);
+
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Erro ao buscar cidades:', error);
+            }
+        }
+
+        // Carrega todas as cidades ao iniciar a página
+        window.onload = async function() {
+            await searchCities();
+        };
+    </script>
+</head>
+<body>
+    <h1>Cities Index</h1>
+    <hr>
+
+    O Frontend manda uma requisição com um parâmetro string que pesquisará em um <br>
+    banco de dados. Abaixo você pode obter o script para os elementos dessa tabela: <br>
+
+    <br>
+    insert City values ('Brazil', 'Curitiba', 'PR'), <br>
+    &emsp; ('Japan', 'Tokyo', 'KT'), <br>
+    &emsp; ('United States', 'New York', 'NY'), <br>
+    &emsp; ('Czech Republic', 'Prague', 'PR') <br>
+
+    <hr>
+
+    O backend deve retornar, no endpoint /cities/query, a lista de cidades cadastradas, <br>
+    e o /cities deve retornar todas as cidades. 
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>City</th>
+                <th>State</th>
+                <th>Country</th>
+            </tr>
+        </thead>
+        <tbody id="citiesTableBody">
+            <!-- As cidades serão inseridas aqui -->
+        </tbody>
+    </table>
+
+    <hr>
+
+    <label>
+        Search:
+        <input type="text" id="searchInput">
+    </label>
+
+    <button class="btn btn-primary" onclick="searchCities()">Search</button>
+</body>
+</html>
