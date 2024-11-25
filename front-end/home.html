@@ -11,43 +11,34 @@
     <header class="header">
         <button class="button btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#NewSpace">New Space</button>
     </header>
-    <main style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; margin: 10px; gap: 10px">
+    <main id="main" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; margin: 10px; gap: 10px">
         <div>
             <input type="text" class="btn btn-outline-info" id="searchInput">
             <input type="submit" class="btn btn-info" onclick="searchSpaces()">
         </div>
         <h2>Your Spaces:</h2>
-        <div class="block">
-            <a href="./space.html">
-                    Space name
-            </a>
-            <button class="btn btn-danger">
-                Delete
-            </button>
-        </div>
         <br>
-        <button class="btn">Ver Mais</button>
-    </main>
-    <div></div>
-
-    <div class="modal fade" id="NewSpace" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="a">New Space</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                <label for="name" class="col-form-label">Name:</label>
-                <input type="text" class="form-control" id="name">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="postSpace()">Create Space</button>
+      </main>
+      <div></div>
+      
+      <div class="modal fade" id="NewSpace" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="a">New Space</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="name" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="postSpace()">Create Space</button>
           </div>
         </div>
       </div>
@@ -57,60 +48,74 @@
         const search = document.getElementById("searchInput").value;
         const url = search ? `http://localhost:8080/spaces?query=${encodeURIComponent(search)}` : "http://localhost:8080/spaces";
         const token = sessionStorage.getItem("token");
-    
+        
         const header = new Headers();
         header.append("Authorization", "Bearer " + token);
-    
+        
+        const main = document.getElementById("main")
         try {
           const response = await fetch(url, {
             method: 'GET',
             headers: header,
           });
-    
+          
           if (!response.ok) {
             throw new Error(`Erro na requisição: ${response.statusText}`);
             console.log("REQUISIÇÃO nao OK")
           } else {
             console.log("REQUISIÇÃO OK")
           }
-    
+          
           const spacesDto = await response.json();
           const spaces = spacesDto.Spaces;
           console.log("Espaços " + spaces)
-    
+          
+          const block = document.getElementById("block");
+          
           if (spaces.length > 0) {
             spaces.forEach(space => {
               const div = document.createElement('div');
               div.classList.add('block');
-    
+              
               const link = document.createElement('a');
               link.href = './space.html';
               link.textContent = space.name;
-    
+              
               div.appendChild(link);
-    
+              
               const button = document.createElement('button');
               button.classList.add('btn', 'btn-danger');
               button.textContent = 'Delete';
-    
+              
               button.addEventListener('click', () => {
                 console.log(`Deletando espaço: ${space.name}`);
               });
-    
+              
               div.appendChild(button);
-              document.body.appendChild(div);
+              main.appendChild(div)
             });
+            
+            
           } else {
             const message = document.createElement('p');
             message.textContent = "Nenhum espaço encontrado.";
             document.body.appendChild(message);
           }
+          
+          const but = document.createElement('button');
+          but.classList.add('btn', 'btn');
+          but.textContent = 'Ver Mais';
+          
+          main.appendChild(but);
+          
         } catch (error) {
           console.error('Erro ao buscar espaços:', error);
           const errorMessage = document.createElement('p');
           errorMessage.textContent = 'Erro ao buscar espaços. Tente novamente mais tarde.';
           document.body.appendChild(errorMessage);
         }
+
+
       }
       async function postSpace(){
 

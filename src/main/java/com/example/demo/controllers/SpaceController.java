@@ -51,19 +51,16 @@ public class SpaceController {
     }
 
     @GetMapping
-    public ResponseEntity<SpaceList> getSpaces(@RequestParam(value = "name", defaultValue = "null")  String name, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "1") Integer size) {
+    public ResponseEntity<SpaceList> getSpaces(@RequestParam(value = "name", defaultValue = "")  String name, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "10") Integer size) {
         System.out.println("CHAMOU O BACK");
         List<Space> Spaces = service.getSpaces(name, page, size);
 
         if(Spaces == null || Spaces.size() <= 0){
             return new ResponseEntity<>(new SpaceList(null, "Espaço não encontrado"), HttpStatus.OK);
-        } else {
-            System.out.println("tem spaces");
-        }
+        } 
     
         List<SpaceReturn> data = new ArrayList<>();
         for (Space space : Spaces) {
-            System.out.println("name: " + space.getName());
             data.add(new SpaceReturn(space.getId(), space.getName()));
         }
 
