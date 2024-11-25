@@ -13,7 +13,7 @@
 <body>
     <header>
         <div>
-            <h3 class="title">-NOME DO ESPAÇO-</h3>
+            <h3 class="title" id="nomeSpace">-NOME DO ESPAÇO-</h3>
             <div>
                 <a href="participants.html" class="btn btn-warning">Participants</a>
             </div>
@@ -22,45 +22,18 @@
     </header>
     <main>
         <div class="search">
-            <input type="text" class="btn btn-outline-info" placeholder="Search">
+            <input type="text" class="btn btn-outline-info" id="spaceQuery" placeholder="Search">
             <button class="btn btn-info">🔎</button>
         </div>
 
-        <div class="question">
-            <details>
-                <summary> > <h4>PERGUNTA</h3> <button class="btn btn-danger">Delete</button> <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AnswerModal">Answer</button></summary>
-                <div>
-                    <p>Resposta 1</p>
-                    <p>Resposta 2</p>
-                    <p>Resposta 3</p>
-                    <p>Resposta 4</p>
-                </div>
-            </details>
-            <details>
-                <summary> > <h4>PERGUNTA</h3> <button class="btn btn-danger">Delete</button> <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AnswerModal">Answer</button></summary>
-                <div>
-                    <p>Resposta 1</p>
-                    <p>Resposta 2</p>
-                    <p>Resposta 3</p>
-                    <p>Resposta 4</p>
-                </div>
-            </details>
-            <details>
-                <summary> > <h4>PERGUNTA</h3> <button class="btn btn-danger">Delete</button> <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AnswerModal">Answer</button></summary>
-                <div>
-                    <p>Resposta 1</p>
-                    <p>Resposta 2</p>
-                    <p>Resposta 3</p>
-                    <p>Resposta 4</p>
-                </div>
-            </details>
-            <br>
-            <button class="btn">Ver Mais</button>
+        <div class="question" id="fatherDiv">
+
         </div>
+        <button class="btn">Ver Mais</button>
     </main>
     <footer>
-        <input type="text" class="btn btn-outline-success" placeholder="Question">
-        <button class="btn btn-success">></button>
+        <input type="text" class="btn btn-outline-success" id="question" placeholder="Question">
+        <button class="btn btn-success" onclick="postQuestion()">></button>
     </footer>
 
     <!-- Modal Answer -->
@@ -82,6 +55,132 @@
         </div>
     </div>
 
+    <script>
+        const url = window.location.href;  
+        const urlParams = new URLSearchParams(window.location.search);  
+        const spaceId = urlParams.get("id");   
+        const spaceName = urlParams.get("nome"); 
+
+        async function getSpace(){
+            document.getElementById("nomeSpace").innerHTML = spaceName
+
+            const searchUrl = `http://localhost:8080/questions/${spaceId}?page=1&size=10`;
+            const token = sessionStorage.getItem("token");
+            
+            const header = new Headers();
+            header.append("Authorization", "Bearer " + token);
+            
+            try {
+              const response = await fetch(searchUrl, {
+                method: 'GET',
+                headers: header,
+              });
+              
+              if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.statusText}`);
+                console.log("REQUISIÇÃO nao OK")
+              } else {
+                console.log("REQUISIÇÃO OK")
+              }
+              
+              const questionsDto = await response.json();
+              console.log(questionsDto)
+
+              questionsDto.forEach(question =>{ //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                console.log("Name:", question.text);  
+                console.log("ID:", question.spaceId); 
+
+                const details = document.createElement('details');
+                
+      
+                const summary = document.createElement('summary');
+
+              
+                const h4 = document.createElement('h4');
+                h4.textContent = question.text; 
+                summary.appendChild(document.createTextNode(' > ')); 
+                summary.appendChild(h4);
+
+                // Criando os botões
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('btn', 'btn-danger');
+                deleteButton.textContent = 'Delete';
+
+                const answerButton = document.createElement('button');
+                answerButton.classList.add('btn', 'btn-primary');
+                answerButton.setAttribute('data-bs-toggle', 'modal');
+                answerButton.setAttribute('data-bs-target', '#AnswerModal');
+                answerButton.textContent = 'Answer';
+
+            
+                summary.appendChild(deleteButton);
+                summary.appendChild(answerButton);
+
+                
+                details.appendChild(summary);
+
+                
+                const div = document.createElement('div');
+
+                const respostas = ['Resposta 1', 'Resposta 2', 'Resposta 3', 'Resposta 4'];
+
+                respostas.forEach(resposta => {
+                const p = document.createElement('p');
+                p.textContent = resposta;
+                div.appendChild(p);
+                });
+
+                details.appendChild(div);
+
+                document.getElementById("fatherDiv").appendChild(details)
+              })
+              
+            } catch (error) {
+              console.error('Erro ao buscar espaços:', error);
+              const errorMessage = document.createElement('p');
+              errorMessage.textContent = 'Erro ao buscar espaços. Tente novamente mais tarde.';
+              document.body.appendChild(errorMessage);
+            }
+
+
+        }
+        async function postQuestion(){
+            const question = document.getElementById("question").value;
+
+            const QuestionData = {
+                text: question,
+                idSpace: spaceId
+            };
+            const token = sessionStorage.getItem("token");
+        
+            const header = new Headers();
+            header.append("Authorization", "Bearer " + token);
+            header.append('Content-Type','application/json');
+    
+            try {
+              const response = await fetch('http://localhost:8080/question', {
+                method: 'POST',
+                headers: header,
+                body: JSON.stringify(QuestionData)
+    
+              });
+              if (!response.ok) {
+                  const errorMessage = await response.text();
+                  alert(errorMessage);
+                  return;
+                }
+                
+                const result = await response.text();
+                alert(result);
+          }catch(error){
+            console.log(error)
+          }
+        }
+
+        window.onload = async function() {
+            await getSpace();
+            };
+    </script>
    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
