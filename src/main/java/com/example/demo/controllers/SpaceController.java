@@ -55,13 +55,17 @@ public class SpaceController {
         System.out.println("CHAMOU O BACK");
         List<Space> Spaces = service.getSpaces(name, page, size);
 
-        if(Spaces == null){
+        if(Spaces == null || Spaces.size() <= 0){
             return new ResponseEntity<>(new SpaceList(null, "Espaço não encontrado"), HttpStatus.OK);
+        } else {
+            System.out.println("tem spaces");
         }
+    
         List<SpaceReturn> data = new ArrayList<>();
         for (Space space : Spaces) {
-                data.add(new SpaceReturn(space.getId(), space.getName()));
-            }
+            System.out.println("name: " + space.getName());
+            data.add(new SpaceReturn(space.getId(), space.getName()));
+        }
 
         return new ResponseEntity<>(new SpaceList(data, "Pesquisa finalizada!"), HttpStatus.OK);
     }
