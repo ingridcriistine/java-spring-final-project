@@ -49,5 +49,4 @@ public class PermissionController {
 
         return new ResponseEntity<>("Permission created with sucess", HttpStatus.OK);
 
-    }
-}
+s}

@@ -4,6 +4,4 @@ public record PermissionData(
     Long spaceId,
     Long userId,
     Boolean isAdmin
-) {
-    
-}
+) {}

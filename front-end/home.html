@@ -11,13 +11,15 @@
     <header class="header">
         <button class="button btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#NewSpace">New Space</button>
     </header>
-    <main id="main" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; margin: 10px; gap: 10px">
+    <main style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; margin: 10px; gap: 10px">
         <div>
             <input type="text" class="btn btn-outline-info" id="searchInput">
             <input type="submit" class="btn btn-info" onclick="searchSpaces()">
         </div>
         <h2>Your Spaces:</h2>
         <br>
+        <div id="main">
+        </div>
       </main>
       <div></div>
       
@@ -46,14 +48,17 @@
     <script>
       async function searchSpaces() {
         const search = document.getElementById("searchInput").value;
-        const url = search ? `http://localhost:8080/spaces?query=${encodeURIComponent(search)}` : "http://localhost:8080/spaces";
+        const url = search ? `http://localhost:8080/spaces?name=${search}` : "http://localhost:8080/spaces";
+        console.log('SEARCH: ', search)
+
         const token = sessionStorage.getItem("token");
-        
         const header = new Headers();
         header.append("Authorization", "Bearer " + token);
         
         const main = document.getElementById("main")
         try {
+          main.innerHTML = '';
+          
           const response = await fetch(url, {
             method: 'GET',
             headers: header,
@@ -61,10 +66,7 @@
           
           if (!response.ok) {
             throw new Error(`Erro na requisição: ${response.statusText}`);
-            console.log("REQUISIÇÃO nao OK")
-          } else {
-            console.log("REQUISIÇÃO OK")
-          }
+          } 
           
           const spacesDto = await response.json();
           const spaces = spacesDto.Spaces;
@@ -87,11 +89,19 @@
               button.classList.add('btn', 'btn-danger');
               button.textContent = 'Delete';
               
-              button.addEventListener('click', () => {
+              button.addEventListener('click', async () => {
                 console.log(`Deletando espaço: ${space.name}`);
+                const response = await fetch('http://localhost:8080/spaces/' + space.id, {
+                  method: 'DELETE',
+                  headers: header,
+                });
+                location.reload()
               });
-              
-              div.appendChild(button);
+
+              if(space.adm){
+                div.appendChild(button);
+              }
+
               main.appendChild(div)
             });
             

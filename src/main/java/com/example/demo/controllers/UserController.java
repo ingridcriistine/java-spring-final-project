@@ -94,11 +94,11 @@ public class UserController {
     public ResponseEntity<UsersList> getUserLimited(
         @RequestParam(value = "query", defaultValue = "") String query, 
         @RequestParam(value = "page", defaultValue = "1") Integer page, 
-        @RequestParam(value = "size", defaultValue = "1") Integer size ) {
+        @RequestParam(value = "size", defaultValue = "10") Integer size ) {
 
         List<User> Users = userService.getUsers(query, page, size);
-        System.out.println(Users.size());
-        if (Users.size() == 0) {
+        
+        if (Users.size() <= 0) {
             return new ResponseEntity<UsersList>(new UsersList(null, "Not founded any Users"), HttpStatus.CONFLICT);
         }
 

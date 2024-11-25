@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,22 +50,30 @@ public class SpaceController {
     }
 
     @GetMapping
-    public ResponseEntity<SpaceList> getSpaces(@RequestParam(value = "name", defaultValue = "")  String name, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "10") Integer size) {
-        System.out.println("CHAMOU O BACK");
+    public ResponseEntity<SpaceList> getSpaces(@RequestAttribute("token") Token token, @RequestParam(value = "name", defaultValue = "")  String name, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "20") Integer size) {
+
         List<Space> Spaces = service.getSpaces(name, page, size);
 
+        Boolean adm;
+        
         if(Spaces == null || Spaces.size() <= 0){
             return new ResponseEntity<>(new SpaceList(null, "Espaço não encontrado"), HttpStatus.OK);
         } 
-    
+        
         List<SpaceReturn> data = new ArrayList<>();
         for (Space space : Spaces) {
-            data.add(new SpaceReturn(space.getId(), space.getName()));
+            var permission = PermissionRepo.havePermission(token.getId(), space.getId());
+            if(permission > 0){
+                adm = true;
+            } else {
+                adm = false;
+            }
+            data.add(new SpaceReturn(space.getId(), space.getName(), adm));
         }
-
+        
         return new ResponseEntity<>(new SpaceList(data, "Pesquisa finalizada!"), HttpStatus.OK);
     }
-
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@RequestAttribute("token") Token token, @PathVariable Long id){
         
