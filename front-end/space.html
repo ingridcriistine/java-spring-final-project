@@ -55,8 +55,6 @@
     </div>
 
     <script>
-        var IDQUESTION = 0;
-
         const url = window.location.href;  
         const urlParams = new URLSearchParams(window.location.search);  
         const spaceId = urlParams.get("id");    
@@ -102,7 +100,7 @@
 
                 console.log("Name:", question.text);  
                 console.log("ID espaço:", question.idSpace); 
-                console.log("IDquestion:", question.idQuestion); 
+                console.log("IDquestion:", question.questionId); 
                 console.log("answers:", question.answers); 
                 
 
@@ -231,7 +229,7 @@
 
           const AnswerData = {
             answer: answer,
-            idQuestion: questionId
+            questionId: questionId
           };
           const token = sessionStorage.getItem("token");
       

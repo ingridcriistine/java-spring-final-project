@@ -119,7 +119,7 @@ public class QuestionController {
     @DeleteMapping("/question/{id}")
     public ResponseEntity<String> deleteQuestion(@RequestAttribute("token") Token token, @PathVariable Long id) {
 
-        if (PermissionRepo.findById(token.getId()).get().getIsAdmin() == false) {
+        if (!PermissionRepo.findById(token.getId()).get().getIsAdmin()) {
             return new ResponseEntity<>("Voce nao pode", HttpStatus.FORBIDDEN);
         }
 
