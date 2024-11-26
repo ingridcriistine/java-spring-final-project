@@ -44,11 +44,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="text" placeholder="Answer">
+                <input type="text" placeholder="Answer" id="answer">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Register</button>
+                <button type="button" class="btn btn-primary" onclick="postAnswer()">Register</button>
             </div>
             </div>
         </div>
@@ -60,15 +60,9 @@
         const url = window.location.href;  
         const urlParams = new URLSearchParams(window.location.search);  
         const spaceId = urlParams.get("id");   
-        const spaceName = urlParams.get("name"); 
+        const spaceName = urlParams.get("nome"); 
+        var questionId = 0;
 
-        const par = document.getElementById('par');
-
-        const link = document.createElement('a');
-        link.href = `./participants.html?id=${spaceId}&name=${spaceName}`
-        link.textContent = "Participants";
-                
-        par.appendChild(link);
         async function getSpace(){
             document.getElementById("nameSpace").innerHTML = spaceName
 
@@ -95,16 +89,17 @@
               console.log(questionsDto)
 
               questionsDto.forEach(question =>{ //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
                 console.log("Name:", question.text);  
-                console.log("ID:", question.idSpace); 
-                console.log("ID Question:", question.idQuestion); 
+                console.log("ID espaço:", question.idSpace); 
+                console.log("IDquestion:", question.questionId); 
+                console.log("answers:", question.answers); 
+                
 
                 const details = document.createElement('details');
-                
       
                 const summary = document.createElement('summary');
 
-              
                 const h4 = document.createElement('h4');
                 h4.textContent = question.text; 
                 summary.appendChild(document.createTextNode(' > ')); 
@@ -114,19 +109,19 @@
                 const deleteButton = document.createElement('button');
                 deleteButton.classList.add('btn', 'btn-danger');
                 deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', ()=>{
+                  deleteQuestion(question.questionId)
+                })
 
                 const answerButton = document.createElement('button');
                 answerButton.classList.add('btn', 'btn-primary');
                 answerButton.setAttribute('data-bs-toggle', 'modal');
                 answerButton.setAttribute('data-bs-target', '#AnswerModal');
                 answerButton.textContent = 'Answer';
-                answerButton.id = question.idQuestion;
+                answerButton.addEventListener('click', ()=>{
+                  getQuestionId(question.questionId)
+                })
 
-                answerButton.onclick = function() {
-                    console.log(answerButton.id)
-                    IDQUESTION = answerButton.id;
-                };
-              
                 summary.appendChild(deleteButton);
                 summary.appendChild(answerButton);
 
@@ -136,11 +131,11 @@
                 
                 const div = document.createElement('div');
 
-                const respostas = ['Resposta 1', 'Resposta 2', 'Resposta 3', 'Resposta 4'];
+                const respostas = question.answers;
 
                 respostas.forEach(resposta => {
                 const p = document.createElement('p');
-                p.textContent = resposta;
+                p.textContent = resposta.Text;
                 div.appendChild(p);
                 });
 
@@ -155,8 +150,36 @@
               errorMessage.textContent = 'Erro ao buscar espaços. Tente novamente mais tarde.';
               document.body.appendChild(errorMessage);
             }
+        }
 
+        function getQuestionId(id){
+          questionId = id
+        }
 
+        async function deleteQuestion(id){
+          const token = sessionStorage.getItem("token");
+      
+          const header = new Headers();
+          header.append("Authorization", "Bearer " + token);
+          header.append('Content-Type','application/json');
+  
+          try {
+            const response = await fetch(`http://localhost:8080/question/${id}`, {
+              method: 'DELETE',
+              headers: header,  
+            });
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                alert(errorMessage);
+                return;
+              }
+              
+              const result = await response.text();
+              alert(result);
+              location.reload()
+        }catch(error){
+          console.log(error)
+        }
         }
 
         async function postQuestion(){
@@ -187,6 +210,42 @@
                 
                 const result = await response.text();
                 alert(result);
+                location.reload()
+          }catch(error){
+            console.log(error)
+          }
+
+        }
+
+        async function postAnswer(){
+          const answer = document.getElementById("answer").value;
+
+          const AnswerData = {
+            answer: answer,
+            idQuestion: questionId
+          };
+          const token = sessionStorage.getItem("token");
+      
+          const header = new Headers();
+          header.append("Authorization", "Bearer " + token);
+          header.append('Content-Type','application/json');
+  
+          try {
+            const response = await fetch('http://localhost:8080/answer', {
+              method: 'POST',
+              headers: header,
+              body: JSON.stringify(AnswerData)
+  
+            });
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                alert(errorMessage);
+                return;
+              }
+              
+            const result = await response.text();
+            alert(result);
+            location.reload()
           }catch(error){
             console.log(error)
           }

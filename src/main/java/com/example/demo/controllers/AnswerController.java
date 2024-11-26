@@ -41,6 +41,6 @@ public class AnswerController {
             return new ResponseEntity<>("Pergunta inválida", HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Resposta adicionada", HttpStatus.ACCEPTED);
     }
 }
