@@ -1,7 +1,10 @@
 package com.example.demo.dto;
 
+import java.util.Set;
 
 public record QuestionData(
     String text,
-    Long idSpace
+    Long questionId,
+    Long idSpace,
+    Set<AnswerText> answers
 ) {}

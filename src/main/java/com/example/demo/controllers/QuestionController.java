@@ -74,14 +74,21 @@ public class QuestionController {
             @RequestParam(name = "size", required = true) Integer size) {
 
         var questions = questionService.getQuestions(space, (page - 1) * size, size);
-
         
         List<QuestionData> data = new ArrayList<>();
         
+        
+        
         for (Question question : questions) {
+            Set<AnswerText> answers = new HashSet<>();
+            for (Answer answer : question.getAnswers()) {
+                answers.add(new AnswerText(answer.getAnswer()));
+            }
             data.add(new QuestionData(
                 question.getQuestion(),
-                question.getSpace().getId()
+                question.getId(),
+                question.getSpace().getId(),
+                answers
             ));
         }
 

@@ -45,11 +45,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="text" placeholder="Answer">
+                <input type="text" placeholder="Answer" id="answer">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Register</button>
+                <button type="button" class="btn btn-primary" onclick="postAnswer">Register</button>
             </div>
             </div>
         </div>
@@ -87,15 +87,17 @@
               console.log(questionsDto)
 
               questionsDto.forEach(question =>{ //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
                 console.log("Name:", question.text);  
-                console.log("ID:", question.spaceId); 
+                console.log("ID espaço:", question.idSpace); 
+                console.log("IDquestion:", question.questionId); 
+                console.log("answers:", question.answers); 
+                
 
                 const details = document.createElement('details');
-                
       
                 const summary = document.createElement('summary');
 
-              
                 const h4 = document.createElement('h4');
                 h4.textContent = question.text; 
                 summary.appendChild(document.createTextNode(' > ')); 
@@ -122,11 +124,11 @@
                 
                 const div = document.createElement('div');
 
-                const respostas = ['Resposta 1', 'Resposta 2', 'Resposta 3', 'Resposta 4'];
+                const respostas = question.answers;
 
                 respostas.forEach(resposta => {
                 const p = document.createElement('p');
-                p.textContent = resposta;
+                p.textContent = resposta.Text;
                 div.appendChild(p);
                 });
 
@@ -141,9 +143,8 @@
               errorMessage.textContent = 'Erro ao buscar espaços. Tente novamente mais tarde.';
               document.body.appendChild(errorMessage);
             }
-
-
         }
+
         async function postQuestion(){
             const question = document.getElementById("question").value;
 
@@ -175,6 +176,41 @@
           }catch(error){
             console.log(error)
           }
+        }
+
+        async function postAnswer(){
+          const question = document.getElementById("answer").value;
+
+          
+
+          const QuestionData = {
+              text: question,
+              idSpace: spaceId
+          };
+          const token = sessionStorage.getItem("token");
+      
+          const header = new Headers();
+          header.append("Authorization", "Bearer " + token);
+          header.append('Content-Type','application/json');
+  
+          try {
+            const response = await fetch('http://localhost:8080/question', {
+              method: 'POST',
+              headers: header,
+              body: JSON.stringify(QuestionData)
+  
+            });
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                alert(errorMessage);
+                return;
+              }
+              
+              const result = await response.text();
+              alert(result);
+        }catch(error){
+          console.log(error)
+        }
         }
 
         window.onload = async function() {
