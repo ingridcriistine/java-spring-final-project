@@ -8,14 +8,13 @@
 
     <link rel="stylesheet" href="css/space.css">
 
-    <title>Aqui vai ser o nome do espaço</title>
+    <title>Aqui vai ser o name do espaço</title>
 </head>
 <body>
     <header>
         <div>
-            <h3 class="title" id="nomeSpace">-NOME DO ESPAÇO-</h3>
-            <div>
-                <a href="participants.html" class="btn btn-warning">Participants</a>
+            <h3 class="title" id="nameSpace">-name DO ESPAÇO-</h3>
+            <div id="div">
             </div>
         </div>
         <hr>
@@ -56,14 +55,26 @@
     </div>
 
     <script>
+        var IDQUESTION = 0;
+
         const url = window.location.href;  
         const urlParams = new URLSearchParams(window.location.search);  
         const spaceId = urlParams.get("id");   
         const spaceName = urlParams.get("name"); 
         var questionId = 0;
 
+        const div = document.getElementById('div');
+        div.classList.add('block');
+        
+        const link = document.createElement('a');
+        link.href = `./participants.html?id=${spaceId}&name=${spaceName}`
+        link.textContent = 'Participants';
+        link.classList.add('btn', 'btn-warning')
+
+        div.appendChild(link);
+
         async function getSpace(){
-            document.getElementById("nomeSpace").innerHTML = spaceName
+            document.getElementById("nameSpace").innerHTML = spaceName
 
             const searchUrl = `http://localhost:8080/questions/${spaceId}?page=1&size=10`;
             const token = sessionStorage.getItem("token");
@@ -91,7 +102,7 @@
 
                 console.log("Name:", question.text);  
                 console.log("ID espaço:", question.idSpace); 
-                console.log("IDquestion:", question.questionId); 
+                console.log("IDquestion:", question.idQuestion); 
                 console.log("answers:", question.answers); 
                 
 
@@ -250,8 +261,8 @@
         }
 
         window.onload = async function() {
-            await getSpace();
-            };
+          await getSpace();
+        };
     </script>
    
 

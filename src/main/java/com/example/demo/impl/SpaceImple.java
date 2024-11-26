@@ -52,7 +52,7 @@ public class SpaceImple implements SpaceService {
         // }
 
         try {
-            var spaces = repo.findSpacesWithPagination(name, (page-1)*size, size);
+            var spaces = repo.findSpacesWithPagination(name, page, size);
 
             return spaces;
 
