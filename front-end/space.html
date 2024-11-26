@@ -14,7 +14,7 @@
     <header>
         <div>
             <h3 class="title" id="nameSpace">-name DO ESPAÇO-</h3>
-            <div id="par">
+            <div id="div">
             </div>
         </div>
         <hr>
@@ -60,8 +60,18 @@
         const url = window.location.href;  
         const urlParams = new URLSearchParams(window.location.search);  
         const spaceId = urlParams.get("id");   
-        const spaceName = urlParams.get("nome"); 
+        const spaceName = urlParams.get("name"); 
         var questionId = 0;
+
+        const div = document.getElementById('div');
+        div.classList.add('block');
+        
+        const link = document.createElement('a');
+        link.href = `./participants.html?id=${spaceId}&name=${spaceName}`
+        link.textContent = 'Participants';
+        link.classList.add('btn', 'btn-warning')
+
+        div.appendChild(link);
 
         async function getSpace(){
             document.getElementById("nameSpace").innerHTML = spaceName
@@ -92,7 +102,7 @@
 
                 console.log("Name:", question.text);  
                 console.log("ID espaço:", question.idSpace); 
-                console.log("IDquestion:", question.questionId); 
+                console.log("IDquestion:", question.idQuestion); 
                 console.log("answers:", question.answers); 
                 
 
