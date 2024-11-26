@@ -29,7 +29,7 @@ public class QuestionImpl implements QuestionService{
     @Override
     public List<Question> getQuestions(Long space, Integer page, Integer size) {
         try {
-            var questions = questionRepo.findQuestionsWithPagination(space, (page-1)*size, size);
+            var questions = questionRepo.findQuestionsWithPagination(space, page, size);
 
             return questions;
 

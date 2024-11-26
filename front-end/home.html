@@ -70,7 +70,6 @@
           
           const spacesDto = await response.json();
           const spaces = spacesDto.Spaces;
-          console.log("Espaços " + spaces)
           
           const block = document.getElementById("block");
           
@@ -80,7 +79,7 @@
               div.classList.add('block');
               
               const link = document.createElement('a');
-              link.href = './space.html';
+              link.href = `./space.html?id=${space.id}&nome=${encodeURIComponent(space.name)}`
               link.textContent = space.name;
               
               div.appendChild(link);
