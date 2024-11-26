@@ -49,7 +49,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="postAnswer">Register</button>
+                <button type="button" class="btn btn-primary" onclick="postAnswer()">Register</button>
             </div>
             </div>
         </div>
@@ -60,6 +60,7 @@
         const urlParams = new URLSearchParams(window.location.search);  
         const spaceId = urlParams.get("id");   
         const spaceName = urlParams.get("nome"); 
+        var questionId = 0;
 
         async function getSpace(){
             document.getElementById("nomeSpace").innerHTML = spaceName
@@ -107,14 +108,19 @@
                 const deleteButton = document.createElement('button');
                 deleteButton.classList.add('btn', 'btn-danger');
                 deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', ()=>{
+                  deleteQuestion(question.questionId)
+                })
 
                 const answerButton = document.createElement('button');
                 answerButton.classList.add('btn', 'btn-primary');
                 answerButton.setAttribute('data-bs-toggle', 'modal');
                 answerButton.setAttribute('data-bs-target', '#AnswerModal');
                 answerButton.textContent = 'Answer';
+                answerButton.addEventListener('click', ()=>{
+                  getQuestionId(question.questionId)
+                })
 
-            
                 summary.appendChild(deleteButton);
                 summary.appendChild(answerButton);
 
@@ -145,6 +151,36 @@
             }
         }
 
+        function getQuestionId(id){
+          questionId = id
+        }
+
+        async function deleteQuestion(id){
+          const token = sessionStorage.getItem("token");
+      
+          const header = new Headers();
+          header.append("Authorization", "Bearer " + token);
+          header.append('Content-Type','application/json');
+  
+          try {
+            const response = await fetch(`http://localhost:8080/question/${id}`, {
+              method: 'DELETE',
+              headers: header,  
+            });
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                alert(errorMessage);
+                return;
+              }
+              
+              const result = await response.text();
+              alert(result);
+              location.reload()
+        }catch(error){
+          console.log(error)
+        }
+        }
+
         async function postQuestion(){
             const question = document.getElementById("question").value;
 
@@ -173,19 +209,19 @@
                 
                 const result = await response.text();
                 alert(result);
+                location.reload()
           }catch(error){
             console.log(error)
           }
+
         }
 
         async function postAnswer(){
-          const question = document.getElementById("answer").value;
+          const answer = document.getElementById("answer").value;
 
-          
-
-          const QuestionData = {
-              text: question,
-              idSpace: spaceId
+          const AnswerData = {
+            answer: answer,
+            idQuestion: questionId
           };
           const token = sessionStorage.getItem("token");
       
@@ -194,10 +230,10 @@
           header.append('Content-Type','application/json');
   
           try {
-            const response = await fetch('http://localhost:8080/question', {
+            const response = await fetch('http://localhost:8080/answer', {
               method: 'POST',
               headers: header,
-              body: JSON.stringify(QuestionData)
+              body: JSON.stringify(AnswerData)
   
             });
             if (!response.ok) {
@@ -206,11 +242,12 @@
                 return;
               }
               
-              const result = await response.text();
-              alert(result);
-        }catch(error){
-          console.log(error)
-        }
+            const result = await response.text();
+            alert(result);
+            location.reload()
+          }catch(error){
+            console.log(error)
+          }
         }
 
         window.onload = async function() {
