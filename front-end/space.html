@@ -8,14 +8,13 @@
 
     <link rel="stylesheet" href="css/space.css">
 
-    <title>Aqui vai ser o nome do espaço</title>
+    <title>Aqui vai ser o name do espaço</title>
 </head>
 <body>
     <header>
         <div>
-            <h3 class="title" id="nomeSpace">-NOME DO ESPAÇO-</h3>
-            <div>
-                <a href="participants.html" class="btn btn-warning">Participants</a>
+            <h3 class="title" id="nameSpace">-name DO ESPAÇO-</h3>
+            <div id="par">
             </div>
         </div>
         <hr>
@@ -56,13 +55,22 @@
     </div>
 
     <script>
+        var IDQUESTION = 0;
+
         const url = window.location.href;  
         const urlParams = new URLSearchParams(window.location.search);  
         const spaceId = urlParams.get("id");   
-        const spaceName = urlParams.get("nome"); 
+        const spaceName = urlParams.get("name"); 
 
+        const par = document.getElementById('par');
+
+        const link = document.createElement('a');
+        link.href = `./participants.html?id=${spaceId}&name=${spaceName}`
+        link.textContent = "Participants";
+                
+        par.appendChild(link);
         async function getSpace(){
-            document.getElementById("nomeSpace").innerHTML = spaceName
+            document.getElementById("nameSpace").innerHTML = spaceName
 
             const searchUrl = `http://localhost:8080/questions/${spaceId}?page=1&size=10`;
             const token = sessionStorage.getItem("token");
@@ -88,7 +96,8 @@
 
               questionsDto.forEach(question =>{ //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                 console.log("Name:", question.text);  
-                console.log("ID:", question.spaceId); 
+                console.log("ID:", question.idSpace); 
+                console.log("ID Question:", question.idQuestion); 
 
                 const details = document.createElement('details');
                 
@@ -111,8 +120,13 @@
                 answerButton.setAttribute('data-bs-toggle', 'modal');
                 answerButton.setAttribute('data-bs-target', '#AnswerModal');
                 answerButton.textContent = 'Answer';
+                answerButton.id = question.idQuestion;
 
-            
+                answerButton.onclick = function() {
+                    console.log(answerButton.id)
+                    IDQUESTION = answerButton.id;
+                };
+              
                 summary.appendChild(deleteButton);
                 summary.appendChild(answerButton);
 
@@ -144,6 +158,7 @@
 
 
         }
+
         async function postQuestion(){
             const question = document.getElementById("question").value;
 
@@ -178,8 +193,8 @@
         }
 
         window.onload = async function() {
-            await getSpace();
-            };
+          await getSpace();
+        };
     </script>
    
 

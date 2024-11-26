@@ -48,5 +48,5 @@ public class PermissionController {
         permissionService.createPermission(user, space, data.isAdmin());
 
         return new ResponseEntity<>("Permission created with sucess", HttpStatus.OK);
-
-s}
+    }
+}

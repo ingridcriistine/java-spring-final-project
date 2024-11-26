@@ -81,7 +81,8 @@ public class QuestionController {
         for (Question question : questions) {
             data.add(new QuestionData(
                 question.getQuestion(),
-                question.getSpace().getId()
+                question.getSpace().getId(),
+                question.getId()
             ));
         }
 

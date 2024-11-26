@@ -9,7 +9,9 @@
 </head>
 <body style="display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh;">
     <header class="header">
-        <a href="space.html">go back</a>
+        <div id="div">
+          
+        </div>
         <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#PermissionModal">New Permission</button>
     </header>
     <main style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; margin: 10px; gap: 10px">
@@ -70,6 +72,19 @@
     </div>
 
     <script>
+      const url = window.location.href;  
+      const urlParams = new URLSearchParams(window.location.search);  
+      const spaceId = urlParams.get("id");   
+      const spaceName = urlParams.get("name"); 
+
+      const div = document.getElementById("div")
+      
+      const link = document.createElement('a');
+      link.href = `./space.html?id=${spaceId}&name=${spaceName}`
+      link.textContent = 'go back';
+      
+      div.appendChild(link);
+
       async function createPermission() {
         console.log("create")
 
