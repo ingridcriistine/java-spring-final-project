@@ -74,13 +74,13 @@
     <script>
       const url = window.location.href;  
       const urlParams = new URLSearchParams(window.location.search);  
-      const spaceId = urlParams.get("id");   
+      const idSpace = urlParams.get("id");   
       const spaceName = urlParams.get("name"); 
 
       const div = document.getElementById("div")
       
       const link = document.createElement('a');
-      link.href = `./space.html?id=${spaceId}&name=${spaceName}`
+      link.href = `./space.html?id=${idSpace}&name=${spaceName}`
       link.textContent = 'go back';
       
       div.appendChild(link);
@@ -89,27 +89,26 @@
         console.log("create")
 
         const id_user = document.getElementById("id_user").value;
-        const auth_user = true;
+        var auth_user = 1;
 
         if(document.getElementById("auth_user").value == 0)
-          auth_user = false;
+          auth_user = 0;
 
         const data = {
-          spaceId: 1,
+          spaceId: idSpace,
           userId: id_user,
-          isAdmin: auth_user
+          isAdmin: auth_user  
         };
 
         const token = sessionStorage.getItem("token");
         const header = new Headers();
         header.append("Authorization", "Bearer " + token);
+        header.append('Content-Type','application/json');
 
         try {
           const response = await fetch('http://localhost:8080/permission', {
               method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
+              headers: header,
               body: JSON.stringify(data)
           });
 
@@ -123,14 +122,12 @@
 
           alert(result);
 
-      } catch (error) {
-          alert('Erro ao se conectar ao servidor: ' + error.message);
-      }
-
+        } catch (error) {
+            alert('Erro ao se conectar ao servidor: ' + error.message);
+        }
       }
 
       async function searchUsers() {
-      
         const search = document.getElementById("searchInput").value;
         const url = search ? `http://localhost:8080/user?query=${search}` : "http://localhost:8080/user";
 
